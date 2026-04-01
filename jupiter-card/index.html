@@ -3,12 +3,54 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Jupiter Card — Cashback Calculator</title>
+  <title>Jupiter Card - Cashback Calculator</title>
   <link rel="icon" type="image/x-icon" href="favicon/favicon.ico" />
   <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png" />
   <link rel="manifest" href="favicon/site.webmanifest" />
+  <meta name="description" content="Calculate your cashback earnings with the Jupiter Global Visa Infinite card. Estimate rewards across spending tiers, referral bonuses, and cross-border fees." />
+  <meta name="robots" content="index, follow, max-image-preview:large" />
+  <link rel="canonical" href="https://www.syotoshi.com/jupiter-card" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Jupiter Card Calculator" />
+  <meta property="og:title" content="Jupiter Card - Cashback Calculator" />
+  <meta property="og:description" content="Calculate your cashback earnings with the Jupiter Global Visa Infinite card. Estimate rewards across spending tiers, referral bonuses, and cross-border fees." />
+  <meta property="og:url" content="https://www.syotoshi.com/jupiter-card" />
+  <meta property="og:image" content="https://www.syotoshi.com/jupiter-card/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="900" />
+  <meta property="og:image:alt" content="Jupiter Global Visa Infinite Card" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@JupiterExchange" />
+  <meta name="twitter:title" content="Jupiter Card - Cashback Calculator" />
+  <meta name="twitter:description" content="Calculate your cashback earnings with the Jupiter Global Visa Infinite card. Estimate rewards across spending tiers, referral bonuses, and cross-border fees." />
+  <meta name="twitter:image" content="https://www.syotoshi.com/jupiter-card/og-image.png" />
+
+  <!-- JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Jupiter Card Cashback Calculator",
+    "description": "Calculate your cashback earnings with the Jupiter Global Visa Infinite card. Estimate rewards across spending tiers, referral bonuses, and cross-border fees.",
+    "url": "https://www.syotoshi.com/jupiter-card",
+    "applicationCategory": "FinanceApplication",
+    "operatingSystem": "Any",
+    "image": "https://www.syotoshi.com/jupiter-card/og-image.png",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  }
+  </script>
+
+  <script async src="https://cloud.umami.is/script.js" data-website-id="4ea69d7b-30e2-44e3-900e-c858899472af"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -1234,14 +1276,14 @@
     <p class="modal-sub">Download the app, enter referral code, and start earning cashback on every purchase.</p>
 
     <div class="modal-stores">
-      <a class="store-btn" href="https://apps.apple.com/nl/app/jupiter-mobile-solana-wallet/id6484069059" target="_blank">
+      <a class="store-btn" href="https://apps.apple.com/nl/app/jupiter-mobile-solana-wallet/id6484069059" target="_blank" data-umami-event="referral-click-appstore">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
         <div class="store-btn-text">
           <span class="store-label">Download on the</span>
           <span class="store-name">App Store</span>
         </div>
       </a>
-      <a class="store-btn" href="https://play.google.com/store/apps/details?id=ag.jup.jupiter.android" target="_blank">
+      <a class="store-btn" href="https://play.google.com/store/apps/details?id=ag.jup.jupiter.android" target="_blank" data-umami-event="referral-click-playstore">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M3 20.5v-17c0-.83.94-1.3 1.6-.8l15 8.5c.6.35.6 1.25 0 1.6l-15 8.5c-.66.5-1.6.03-1.6-.8z"/></svg>
         <div class="store-btn-text">
           <span class="store-label">Get it on</span>
@@ -1607,6 +1649,7 @@ function copyRefCodeModal() {
 
 function openModal() {
   document.getElementById('modal-backdrop').classList.add('open');
+  if (typeof umami !== 'undefined') umami.track('referral-popup-open');
 }
 
 function closeModal() {
