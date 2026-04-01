@@ -1,0 +1,1781 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jupiter Card — Cashback Calculator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:    #020e14;
+      --b0:    #0a2d42;
+      --b1:    #0d3550;
+      --b2:    #104060;
+      --b3:    #154d70;
+      --pri:   #00e6cf;
+      --prid:  #00c4ae;
+      --prig:  rgba(0,230,207,.13);
+      --w:     #ffffff;
+      --n3:    #dce8f5;
+      --n4:    #a8bdd4;
+      --n5:    #5d7a96;
+    }
+    html, body {
+      height: 100%; overflow: hidden;
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg); color: var(--w);
+    }
+
+    /* ── APP SHELL ── */
+    .app {
+      height: 100vh;
+      display: grid;
+      grid-template-rows: 52px 1fr;
+    }
+
+    /* ── NAV ── */
+    nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2.5rem;
+      background: rgba(2,14,20,.92);
+      border-bottom: 1px solid rgba(0,230,207,.08);
+      backdrop-filter: blur(14px);
+      z-index: 10;
+      position: relative;
+    }
+    .nav-logo { display: flex; align-items: center; gap: .5rem; font-weight: 700; font-size: 1rem; }
+    .nav-pill {
+      font-size: .65rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+      background: var(--prig); color: var(--pri);
+      border: 1px solid rgba(0,230,207,.2); border-radius: 99px; padding: 2px 10px;
+      position: absolute; left: 50%; transform: translateX(-50%);
+      pointer-events: none;
+    }
+    :root { --ev: rgb(199,242,132); --ev2: rgba(199,242,132,.15); --ev3: rgba(199,242,132,.3); }
+    .nav-event {
+      display: flex; align-items: center; gap: .45rem;
+      background: var(--ev2); border: 1px solid var(--ev3);
+      border-radius: 99px; padding: 4px 12px;
+      font-size: .65rem; font-weight: 700; color: var(--ev);
+      white-space: nowrap; text-decoration: none; cursor: pointer;
+    }
+    .nav-event:hover { background: rgba(199,242,132,.22); }
+    .nav-event-dot {
+      width: 6px; height: 6px; border-radius: 50%; background: var(--ev); flex-shrink: 0;
+      animation: pulseRing 1.4s ease-out infinite;
+    }
+    .nav-event-countdown { font-weight: 500; color: rgba(199,242,132,.75); margin-left: 2px; }
+    body.light .nav-event { background: rgba(80,140,20,.12); border-color: rgba(80,140,20,.4); color: #2d5a08; }
+    body.light .nav-event-countdown { color: rgba(45,90,8,.75); }
+    body.light #m-ref-event-badge { background: rgba(80,140,20,.12) !important; border-color: rgba(80,140,20,.4) !important; color: #2d5a08 !important; }
+    body.light #modal-signup-event { background: rgba(80,140,20,.12) !important; border-color: rgba(80,140,20,.4) !important; color: #2d5a08 !important; }
+    .nav-cta {
+      background: var(--pri); color: #020e14; font-weight: 700; font-size: .8rem;
+      border: none; border-radius: 8px; padding: 7px 16px; cursor: pointer;
+      text-decoration: none; transition: background .15s;
+    }
+    .nav-cta:hover { background: #00c9b4; }
+
+    .ref-copy-btn {
+      background: var(--pri); color: #020e14; font-weight: 700; font-size: .65rem;
+      border: none; border-radius: 6px; padding: 5px 10px; cursor: pointer;
+      transition: background .15s, transform .1s; white-space: nowrap; flex-shrink: 0;
+    }
+    .ref-copy-btn:hover { background: #00c9b4; }
+    .ref-copy-btn.copied { background: #4ade80; transform: scale(.97); }
+    /* ── MODAL ── */
+    .modal-backdrop {
+      position: fixed; inset: 0; z-index: 1000;
+      background: rgba(2,14,20,.75); backdrop-filter: blur(6px);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none;
+      transition: opacity .2s ease;
+    }
+    .modal-backdrop.open { opacity: 1; pointer-events: all; }
+    .modal {
+      background: var(--b0); border: 1px solid rgba(0,230,207,.2);
+      border-radius: 18px; padding: 2rem 2rem 1.75rem;
+      width: min(420px, 92vw); position: relative;
+      transform: translateY(12px); transition: transform .25s ease;
+      box-shadow: 0 24px 64px rgba(0,0,0,.6);
+    }
+    .modal-backdrop.open .modal { transform: translateY(0); }
+    .modal-close {
+      position: absolute; top: .9rem; right: .9rem;
+      background: rgba(255,255,255,.06); border: none; color: var(--n4);
+      width: 26px; height: 26px; border-radius: 99px; cursor: pointer;
+      font-size: .7rem; line-height: 1; transition: background .15s, color .15s;
+    }
+    .modal-close:hover { background: rgba(255,255,255,.12); color: var(--w); }
+    .modal-logo { display: flex; align-items: center; gap: .6rem; margin-bottom: .6rem; }
+    .modal-title { font-size: 1.15rem; font-weight: 800; color: var(--w); }
+    .modal-sub { font-size: .75rem; color: var(--n4); line-height: 1.55; margin-bottom: 1.2rem; }
+    .modal-stores { display: flex; gap: .75rem; margin-bottom: 1.25rem; }
+    .store-btn {
+      flex: 1; display: flex; align-items: center; gap: .55rem;
+      background: var(--b2); border: 1px solid rgba(0,230,207,.12);
+      border-radius: 10px; padding: .6rem .9rem; text-decoration: none;
+      color: var(--w); transition: background .15s, border-color .15s;
+    }
+    .store-btn:hover { background: var(--b3); border-color: rgba(0,230,207,.3); }
+    .store-btn-text { display: flex; flex-direction: column; }
+    .store-label { font-size: .55rem; color: var(--n4); }
+    .store-name { font-size: .82rem; font-weight: 700; }
+    .modal-divider {
+      display: flex; align-items: center; gap: .6rem;
+      font-size: .6rem; color: var(--n5); text-transform: uppercase; letter-spacing: .08em;
+      margin-bottom: 1rem;
+    }
+    .modal-divider::before, .modal-divider::after {
+      content: ''; flex: 1; height: 1px; background: rgba(255,255,255,.07);
+    }
+    .modal-ref {
+      display: flex; align-items: center; gap: .6rem;
+      background: var(--prig); border: 1px solid rgba(0,230,207,.25);
+      border-radius: 10px; padding: .65rem 1rem; margin-bottom: .65rem;
+    }
+    .modal-ref-code {
+      flex: 1; font-size: 1.6rem; font-weight: 900; letter-spacing: .2em; color: var(--w);
+    }
+    .modal-ref-note {
+      font-size: .68rem; color: var(--n4); line-height: 1.55; text-align: center;
+    }
+    .modal-ref-note strong { color: var(--n3); }
+    body.light .modal { background: #e8f8f6; border-color: rgba(0,180,160,.2); }
+    body.light .modal-title { color: #111; }
+    body.light .modal-sub { color: #444; }
+    body.light .store-btn { background: #d4ecea; border-color: rgba(0,180,160,.2); color: #111; }
+    body.light .store-btn:hover { background: #c0e0dd; }
+    body.light .store-label { color: #555; }
+    body.light .modal-ref { background: rgba(0,200,180,.1); }
+    body.light .modal-ref-code { color: #111; }
+    body.light .modal-ref-note { color: #444; }
+    body.light .modal-ref-note strong { color: #111; }
+    body.light .modal-close { color: #555; }
+    body.light .modal-close:hover { background: rgba(0,0,0,.08); color: #111; }
+
+    .ref-bonus-amount {
+      font-size: 1.1rem; font-weight: 900; color: var(--pri);
+    }
+
+    /* ── MAIN: 3-column layout ── */
+    main {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      padding: 1.2rem 4rem;
+      gap: 0;
+      overflow: hidden;
+    }
+
+    /* ── LEFT PANEL ── */
+    .left {
+      display: flex; flex-direction: column;
+      padding: 1.1rem 1.8rem 1.1rem 0;
+      border-right: 1px solid rgba(0,230,207,.08);
+      overflow: hidden; gap: .8rem;
+    }
+
+    .hero-text h1 {
+      font-size: 1.3rem; font-weight: 800; letter-spacing: -.03em; line-height: 1.2;
+    }
+    .hero-text h1 em { font-style: normal; color: var(--pri); }
+    .hero-text p { font-size: .73rem; color: var(--n4); line-height: 1.5; margin-top: .25rem; }
+
+    /* Controls */
+    .ctrl-block { display: flex; flex-direction: column; gap: .45rem; }
+    .ctrl-head   { display: flex; justify-content: space-between; align-items: center; }
+    .ctrl-label  {
+      font-size: .66rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase;
+      color: var(--n4);
+    }
+    .ctrl-val { font-size: .95rem; font-weight: 800; color: var(--pri); }
+
+    /* Range sliders */
+    .range-wrap { position: relative; height: 22px; display: flex; align-items: center; }
+    .range-track { position: absolute; left: 10px; right: 10px; height: 5px; border-radius: 99px; background: var(--b2); }
+    .range-fill  { position: absolute; left: 0; height: 5px; border-radius: 99px; background: var(--pri); pointer-events: none; z-index: 1; min-width: 10px; }
+
+    input[type=range] {
+      -webkit-appearance: none; appearance: none;
+      position: absolute; left: 10px; width: calc(100% - 20px);
+      height: 5px; border-radius: 99px;
+      background: transparent; outline: none; cursor: pointer; z-index: 2; margin: 0;
+    }
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none; appearance: none;
+      width: 20px; height: 20px; border-radius: 50%;
+      background: var(--pri); border: 2.5px solid var(--bg);
+      box-shadow: 0 0 0 2px var(--pri), 0 3px 10px rgba(0,230,207,.35);
+      cursor: pointer;
+    }
+    .range-mm { display: flex; justify-content: space-between; font-size: .6rem; color: var(--n5); }
+
+    /* Referral tier markers */
+    .tier-markers {
+      position: relative; height: 44px; margin-top: .15rem;
+    }
+    .tm {
+      position: absolute; top: 0;
+      display: flex; flex-direction: column; align-items: center;
+      cursor: pointer; pointer-events: all;
+    }
+    .tm-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--b3); border: 1px solid var(--n5);
+      transition: all .25s; margin-bottom: 3px; flex-shrink: 0;
+    }
+    .tm.reached .tm-dot { background: var(--pri); border-color: var(--pri); box-shadow: 0 0 6px rgba(0,230,207,.5); }
+    .tm-label { font-size: .58rem; font-weight: 600; color: var(--n5); text-align: center; line-height: 1.2; transition: color .25s; white-space: nowrap; }
+    .tm.reached .tm-label { color: var(--pri); }
+    .tm.current .tm-dot { transform: scale(1.4); box-shadow: 0 0 10px rgba(0,230,207,.7); }
+    .tm.current .tm-label { color: var(--w); font-weight: 700; }
+
+    /* Active tier badge */
+    .tier-badge-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: .6rem .8rem;
+      background: var(--prig); border: 1px solid rgba(0,230,207,.2);
+      border-radius: 10px;
+    }
+    .tbr-left { display: flex; flex-direction: column; gap: 1px; }
+    .tbr-name { font-size: .72rem; font-weight: 700; color: var(--w); }
+    .tbr-refs { font-size: .62rem; color: var(--n5); }
+    .tbr-rate { font-size: 1.4rem; font-weight: 800; color: var(--pri); letter-spacing: -.03em; }
+
+    /* Metrics */
+    .metrics { display: grid; grid-template-columns: 1fr 1fr; gap: .45rem; }
+    .metric {
+      background: var(--b1); border: 1px solid rgba(255,255,255,.05);
+      border-radius: 12px; padding: .65rem .8rem;
+    }
+    .metric.span2 { grid-column: span 2; }
+    .metric.hi {
+      background: linear-gradient(135deg, #031f30, #020e14);
+      border-color: rgba(0,230,207,.2);
+    }
+    .m-label { font-size: .6rem; font-weight: 600; text-transform: uppercase; letter-spacing: .09em; color: var(--n5); margin-bottom: .2rem; }
+    .m-val   { font-size: 1.4rem; font-weight: 800; letter-spacing: -.03em; color: var(--w); }
+    .m-val.g { color: var(--pri); }
+    .m-val.big {
+      font-size: 1.9rem;
+      background: linear-gradient(90deg, var(--pri), #00ffee);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .m-sub { font-size: .63rem; color: var(--n5); margin-top: .1rem; }
+
+    .cap-warn {
+      display: none; align-items: center; gap: .45rem;
+      padding: .45rem .7rem;
+      background: rgba(245,197,66,.06); border: 1px solid rgba(245,197,66,.2);
+      border-radius: 8px; font-size: .68rem; color: #f5c542;
+    }
+    .cap-warn.show { display: flex; }
+
+
+    /* ── CENTER: phone column ── */
+    .center {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 1rem 2.5rem;
+      position: relative;
+    }
+    .center::before {
+      content: '';
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+      width: 360px; height: 600px;
+      background: radial-gradient(ellipse, rgba(0,230,207,.07) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    /* Jupiter card */
+    .jcard {
+      width: 270px;
+      background: linear-gradient(135deg, #0a1e2e 0%, #020e14 60%, #031822 100%);
+      border-radius: 18px; border: 1px solid rgba(0,230,207,.18);
+      position: relative; overflow: hidden; aspect-ratio: 1.586;
+      box-shadow: 0 16px 52px rgba(0,0,0,.55), 0 0 0 1px rgba(0,230,207,.08);
+      margin-bottom: .9rem; flex-shrink: 0;
+      transition: background .5s, border-color .5s, box-shadow .2s, transform .1s;
+      transform-style: preserve-3d;
+      cursor: pointer;
+      will-change: transform;
+    }
+    .jcard:hover {
+      box-shadow: 0 24px 70px rgba(0,0,0,.7), 0 0 0 1px rgba(0,230,207,.2), 0 0 30px rgba(0,230,207,.08);
+    }
+    .jcard-shine {
+      position: absolute; inset: 0; border-radius: 18px;
+      background: radial-gradient(circle at 50% 50%, rgba(255,255,255,.08) 0%, transparent 60%);
+      opacity: 0; transition: opacity .2s; pointer-events: none; z-index: 5;
+    }
+    .jc-arc1 { position: absolute; bottom: -32px; left: -10px; width: 232px; height: 232px; border-radius: 50%; border: 1px solid rgba(0,230,207,.3); }
+    .jc-arc2 { position: absolute; bottom: -64px; left: 45px; width: 283px; height: 283px; border-radius: 50%; border: 1px solid rgba(0,230,207,.15); }
+    .jc-logo { position: absolute; top: 15px; left: 18px; display: flex; align-items: center; gap: 6px; font-weight: 700; font-size: .95rem; }
+    .jc-visa { position: absolute; top: 13px; right: 15px; text-align: right; }
+    .jc-visa-t { font-size: 1.2rem; font-weight: 800; letter-spacing: -.02em; }
+    .jc-visa-s { font-size: .56rem; color: var(--n4); letter-spacing: .05em; }
+    .jc-dots  { position: absolute; bottom: 17px; left: 18px; font-size: 1rem; letter-spacing: .12em; color: rgba(255,255,255,.4); }
+
+    /* Phone */
+    .phone {
+      width: 270px; height: 530px;
+      background: #0a0a0f;
+      border-radius: 44px;
+      border: 2px solid rgba(255,255,255,.14);
+      box-shadow: 0 0 0 5px rgba(255,255,255,.04), 0 36px 90px rgba(0,0,0,.75), inset 0 1px 0 rgba(255,255,255,.07);
+      position: relative; overflow: hidden; flex-shrink: 0;
+      transition: background .5s, border-color .5s;
+    }
+    .ph-screen  { position: absolute; inset: 0; background: linear-gradient(160deg, #0c2a35 0%, #071a25 40%, #020e14 100%); transition: background .5s; }
+    .ph-notch   { position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 98px; height: 28px; background: #0a0a0f; border-radius: 0 0 18px 18px; z-index: 10; transition: background .5s; }
+    .ph-status  { position: absolute; top: 0; left: 0; right: 0; height: 48px; display: flex; align-items: flex-end; justify-content: space-between; padding: 0 18px 7px; font-size: .6rem; color: rgba(255,255,255,.7); z-index: 5; }
+    .ph-icon-svg { fill: rgba(255,255,255,.7); color: rgba(255,255,255,.7); }
+    /* thin inner bezel — only visible in light mode */
+    .ph-bezel { position: absolute; inset: 0; border-radius: 44px; pointer-events: none; z-index: 8; transition: box-shadow .4s; }
+    body.light .ph-bezel { box-shadow: inset 0 0 0 3px #2a2a2a; }
+    .ph-time    { position: absolute; top: 64px; left: 0; right: 0; text-align: center; z-index: 5; }
+    .ph-time .t { font-size: 3.3rem; font-weight: 200; letter-spacing: -.02em; }
+    .ph-time .d { font-size: .78rem; color: rgba(255,255,255,.55); margin-top: 2px; }
+    .ph-notifs  { position: absolute; top: 188px; left: 12px; right: 12px; display: flex; flex-direction: column; gap: 9px; z-index: 6; }
+    .pn {
+      background: rgba(28,28,38,.9); backdrop-filter: blur(10px);
+      border-radius: 16px; padding: 10px 13px;
+      display: flex; align-items: center; gap: 9px;
+      border: 1px solid rgba(255,255,255,.08);
+      transform: translateY(-18px); opacity: 0;
+      transition: transform .42s cubic-bezier(.23,1,.32,1), opacity .42s ease, background .5s, border-color .5s;
+    }
+    .pn.in { transform: translateY(0); opacity: 1; }
+    .pn-icon { width: 36px; height: 36px; border-radius: 9px; flex-shrink: 0; background: #031d2b; display: flex; align-items: center; justify-content: center; font-size: 1rem; transition: background .5s; }
+    .pn-body { flex: 1; min-width: 0; }
+    .pn-app  { font-size: .62rem; font-weight: 700; color: rgba(255,255,255,.55); }
+    .pn-msg  { font-size: .74rem; color: rgba(255,255,255,.9); line-height: 1.35; }
+    .pn-msg .hi { color: var(--pri); font-weight: 700; }
+    .pn-t    { font-size: .55rem; color: rgba(255,255,255,.3); flex-shrink: 0; }
+    .ph-dots { position: absolute; bottom: 92px; left: 0; right: 0; text-align: center; z-index: 5; }
+    .ph-dot  { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,.18); margin: 0 2px; transition: background .3s; }
+    .ph-dot.on { background: var(--pri); }
+    .ph-btns { position: absolute; bottom: 30px; left: 0; right: 0; display: flex; justify-content: space-between; padding: 0 34px; z-index: 5; }
+    .ph-btn  { width: 44px; height: 44px; border-radius: 50%; background: rgba(255,255,255,.1); display: flex; align-items: center; justify-content: center; font-size: .9rem; cursor: pointer; transition: background .3s; }
+    .ph-btn:hover { background: rgba(255,255,255,.18); }
+
+    /* ── LIGHT THEME ── */
+    body.light {
+      --bg: #eef3f8;
+      --w:  #000000;
+      --n3: #0a0a0a;
+      --n4: #111111;
+      --n5: #222222;
+    }
+    /* Nav gets a light background */
+    body.light nav { background: rgba(232,248,246,.95); border-bottom-color: rgba(0,230,207,.2); }
+
+    /* All text in metric cards, tier badge, purchase panel → dark */
+    body.light .metric .m-val          { color: #111111; }
+    body.light .metric .m-val.g        { color: var(--pri); }
+    body.light .metric .m-val.big      { background: linear-gradient(90deg, var(--pri), #00ffee); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    body.light .metric .m-label        { color: #333333; }
+    body.light .metric .m-sub          { color: #444444; }
+    body.light .tier-badge-row .tbr-name { color: #111111; }
+    body.light .tier-badge-row .tbr-rate { color: var(--pri); }
+    body.light .tier-badge-row .tbr-refs { color: #333333; }
+    body.light .pp-label               { color: #333333; }
+    body.light .pp-merchant .pp-name   { color: #111111; }
+    body.light .pp-merchant .pp-cat    { color: #444444; }
+    body.light .pp-item                { color: #333333; }
+    body.light .pp-item.tot            { color: #111111; }
+    body.light .ppc-lbl                { color: var(--pri); }
+    body.light .ppc-sub                { color: var(--pri); }
+    body.light .ppc-amt                { color: var(--pri); }
+    body.light .pp-eff                 { color: #333333; }
+    body.light .pp-eff strong          { color: #111111; }
+    body.light .ex-btn                 { color: #333333; }
+    body.light .ex-btn.on              { color: #007a6d; }
+
+    /* Phone → white */
+    body.light .phone       { background: #ffffff; border-color: rgba(0,0,0,.1); box-shadow: 0 0 0 5px rgba(0,0,0,.03), 0 36px 90px rgba(0,80,70,.15), inset 0 1px 0 rgba(255,255,255,.8); }
+    body.light .ph-screen   { background: linear-gradient(160deg, #e8f8f6 0%, #f4fbfa 50%, #ffffff 100%); }
+    body.light .ph-notch    { background: #000000; }
+    body.light .ph-status   { color: rgba(0,0,0,.75); }
+    body.light .ph-icon-svg { fill: rgba(0,0,0,.6); color: rgba(0,0,0,.6); }
+    body.light .ph-time .t  { color: #020e14; }
+    body.light .ph-time .d  { color: rgba(2,14,20,.45); }
+    body.light .pn          { background: #d4ecea; border-color: rgba(0,180,160,.15); }
+    body.light .pn-app      { color: rgba(2,14,20,.45); }
+    body.light .pn-msg      { color: rgba(2,14,20,.85); }
+    body.light .pn-t        { color: rgba(2,14,20,.3); }
+    body.light .pn-icon     { background: #d8f0ee; }
+    body.light .ph-dot      { background: rgba(2,14,20,.18); }
+    body.light .ph-btn      { background: rgba(2,14,20,.07); }
+    body.light .ph-btn:hover { background: rgba(2,14,20,.13); }
+
+    /* Jupiter card — keep text white in light theme */
+    body.light .jcard .jc-logo,
+    body.light .jcard .jc-visa-t,
+    body.light .jcard .jc-dots  { color: #ffffff; }
+    body.light .jcard .jc-visa-s { color: rgba(255,255,255,.6); }
+
+    /* Metric cards → lighter */
+    body.light .metric      { background: #d4ecea; border-color: rgba(0,180,160,.15); }
+    body.light .metric.hi   { background: linear-gradient(135deg, #b8e2de, #cdf0ec); border-color: rgba(0,200,180,.25); }
+
+    /* Purchase panel cards → lighter */
+    body.light .pp-merchant { background: #d4ecea; border-color: rgba(0,180,160,.15); }
+    body.light .pp-eff      { background: #d4ecea; }
+    body.light .ex-btn      { background: #d4ecea; border-color: rgba(0,180,160,.12); }
+    body.light .ex-btn.on   { background: rgba(0,230,207,.18); border-color: var(--pri); }
+
+    /* ── RIGHT PANEL ── */
+    .right {
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 1.1rem 0 1.1rem 1.8rem;
+      border-left: 1px solid rgba(0,230,207,.08);
+      gap: .75rem; overflow: hidden;
+    }
+
+    .pp-label { font-size: .6rem; font-weight: 600; text-transform: uppercase; letter-spacing: .1em; color: var(--n5); }
+    .pp-merchant {
+      display: flex; align-items: center; gap: .55rem;
+      padding: .6rem .8rem; background: var(--b1);
+      border-radius: 11px; border: 1px solid rgba(255,255,255,.06);
+    }
+    .pp-icon { font-size: 1.1rem; flex-shrink: 0; }
+    .pp-name { font-size: .88rem; font-weight: 700; }
+    .pp-cat  { font-size: .65rem; color: var(--n5); }
+    .pp-items { display: flex; flex-direction: column; gap: .28rem; }
+    .pp-item {
+      display: flex; justify-content: space-between;
+      font-size: .73rem; color: var(--n4);
+      padding: .22rem 0; border-bottom: 1px solid rgba(255,255,255,.03);
+    }
+    .pp-item.tot { font-weight: 700; color: var(--w); border: none; padding-top: .32rem; }
+    .pp-cashback {
+      background: linear-gradient(135deg, rgba(0,230,207,.09), rgba(0,230,207,.04));
+      border: 1px solid rgba(0,230,207,.2); border-radius: 12px;
+      padding: .65rem .85rem;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .ppc-lbl { font-size: .6rem; font-weight: 700; text-transform: uppercase; letter-spacing: .09em; color: var(--pri); }
+    .ppc-sub { font-size: .62rem; color: var(--prid); margin-top: 1px; }
+    .ppc-amt { font-size: 1.35rem; font-weight: 800; color: var(--pri); }
+    .pp-eff  {
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: .73rem; color: var(--n4);
+      padding: .45rem .75rem; background: var(--b1); border-radius: 9px;
+    }
+    .pp-eff strong { color: var(--w); }
+
+    .pp-summary { display: flex; flex-direction: column; gap: .4rem; }
+    .pp-summary-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: .65rem .9rem; border-radius: 11px;
+      font-size: .82rem; font-weight: 600;
+    }
+    .pp-summary-row span { color: var(--n4); }
+    .pp-summary-row strong { font-size: 1.15rem; font-weight: 800; letter-spacing: -.02em; }
+    .pp-summary-row.net { background: var(--b1); border: 1px solid rgba(0,230,207,.12); }
+    .pp-summary-row.net strong { color: var(--pri); }
+    .pp-summary-row.eff { background: var(--b1); border: 1px solid rgba(255,255,255,.06); }
+    .pp-summary-row.eff strong { color: var(--w); }
+    body.light .pp-summary-row { background: #d4ecea; }
+    body.light .pp-summary-row span { color: #333; }
+    body.light .pp-summary-row.net { border-color: rgba(0,180,160,.2); }
+    body.light .pp-summary-row.net strong { color: var(--pri); }
+    body.light .pp-summary-row.eff { border-color: rgba(0,0,0,.08); }
+    body.light .pp-summary-row.eff strong { color: #111; }
+    .ex-nav { display: flex; gap: .4rem; }
+    .ex-btn {
+      flex: 1; background: var(--b1); border: 1px solid rgba(255,255,255,.06);
+      color: var(--n4); border-radius: 9px; padding: .42rem .25rem;
+      font-size: .68rem; font-weight: 600; cursor: pointer;
+      transition: all .15s; text-align: center; font-family: inherit;
+    }
+    .ex-btn:hover { border-color: rgba(0,230,207,.3); color: var(--n3); }
+    .ex-btn.on { background: var(--prig); border-color: var(--pri); color: var(--pri); }
+
+    /* Referral rewards panel */
+    .ref-rewards {
+      background: var(--b1); border: 1px solid rgba(0,230,207,.1);
+      border-radius: 14px; padding: .8rem 1rem; display: flex; flex-direction: column; gap: .6rem;
+    }
+    .ref-rewards-header { display: flex; align-items: center; justify-content: space-between; }
+    .ref-rewards-title { font-size: .68rem; font-weight: 700; text-transform: uppercase; letter-spacing: .09em; color: var(--n4); }
+    .boost-btn {
+      display: flex; align-items: center; gap: .35rem;
+      background: var(--b2); border: 1px solid rgba(255,255,255,.08);
+      border-radius: 99px; padding: .25rem .65rem;
+      font-size: .65rem; font-weight: 700; color: var(--n4);
+      cursor: pointer; font-family: inherit; transition: all .2s;
+    }
+    .boost-btn.on { background: rgba(255,180,0,.12); border-color: rgba(255,180,0,.4); color: #f5c542; }
+    .boost-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--n5); transition: background .2s; flex-shrink: 0; }
+    .boost-btn.on .boost-dot { background: #f5c542; box-shadow: 0 0 5px rgba(245,197,66,.6); }
+    .ref-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: .4rem .5rem; background: var(--b2); border-radius: 8px;
+      font-size: .72rem;
+    }
+    .ref-row-left { display: flex; flex-direction: column; gap: 1px; }
+    .ref-row-desc { color: var(--n4); font-size: .68rem; }
+    .ref-row-val  { font-weight: 800; color: var(--pri); font-size: .95rem; }
+    .ref-row-val.gold { color: #f5c542; }
+    .ref-divider { height: 1px; background: rgba(255,255,255,.05); margin: .1rem 0; }
+    .ref-total-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: .35rem .5rem;
+    }
+    .ref-total-label { font-size: .65rem; font-weight: 700; text-transform: uppercase; letter-spacing: .09em; color: var(--n5); }
+    .ref-total-val   { font-size: 1.05rem; font-weight: 800; color: var(--pri); }
+
+    body.light .ref-rewards { background: #d4ecea; border-color: rgba(0,180,160,.15); }
+    body.light .ref-row     { background: rgba(0,0,0,.06); }
+    body.light .ref-row-desc { color: #333; }
+    body.light .ref-row-val  { color: var(--pri); }
+    body.light .boost-btn   { background: rgba(0,0,0,.07); border-color: rgba(0,0,0,.1); color: #333; }
+    body.light .boost-btn.on { background: rgba(245,197,66,.15); border-color: rgba(245,197,66,.5); color: #7a5e00; }
+    body.light .boost-btn.on .boost-dot { background: #c49000; box-shadow: none; }
+    body.light .ref-total-label { color: #555; }
+    body.light .ref-total-val   { color: var(--pri); }
+    body.light .ref-rewards-title { color: #333; }
+
+    /* Plus divider between the two highlight cards */
+    .plus-divider {
+      position: absolute; right: -14px; top: 50%;
+      transform: translateY(-50%);
+      width: 24px; height: 24px; border-radius: 50%;
+      background: var(--b3); border: 1px solid rgba(0,230,207,.2);
+      color: var(--pri); font-size: .85rem; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      z-index: 2; flex-shrink: 0;
+    }
+    body.light .plus-divider { background: #b0d8d6; border-color: rgba(0,180,160,.3); }
+
+    /* Country selector */
+    .country-select-wrap { position: relative; }
+    .country-select-wrap select {
+      width: 100%; background: var(--b2); color: var(--w);
+      border: 1px solid rgba(255,255,255,.08); border-radius: 9px;
+      padding: .45rem 2rem .45rem .75rem; font-size: .78rem; font-family: inherit;
+      cursor: pointer; outline: none; appearance: none; -webkit-appearance: none;
+      transition: border-color .15s;
+    }
+    .country-select-wrap select:focus { border-color: rgba(0,230,207,.4); }
+    .country-select-wrap::after {
+      content: '▾'; position: absolute; right: .7rem; top: 50%;
+      transform: translateY(-50%); color: var(--n4); pointer-events: none;
+      font-size: .75rem;
+    }
+    body.light .country-select-wrap select { background: #d4ecea; color: #111; border-color: rgba(0,0,0,.1); }
+
+    @media (max-width: 900px) {
+      .country-select-wrap { width: 100%; }
+      .country-select-wrap select {
+        font-size: .9rem;
+        padding: .65rem 2rem .65rem .75rem;
+        border-radius: 10px;
+        border: 1.5px solid rgba(0,230,207,.25);
+        appearance: none; -webkit-appearance: none;
+        width: 100%; max-width: 100%; box-sizing: border-box;
+      }
+    }
+
+    .fee-badge {
+      font-size: .65rem; font-weight: 700; border-radius: 99px;
+      padding: 2px 8px; background: rgba(0,230,207,.12);
+      border: 1px solid rgba(0,230,207,.25); color: var(--pri);
+      transition: all .25s;
+    }
+    .fee-badge.warn { background: rgba(255,80,80,.1); border-color: rgba(255,80,80,.3); color: #f87171; }
+    body.light .fee-badge.warn { color: #c0392b; }
+
+    /* Info icon + tooltip */
+    .info-icon {
+      position: relative; display: inline-flex; align-items: center;
+      color: var(--n5); cursor: pointer; flex-shrink: 0;
+    }
+    .info-icon:hover { color: var(--pri); }
+    .info-tip {
+      display: none; position: absolute; bottom: calc(100% + 6px); left: 50%;
+      transform: translateX(-50%);
+      background: var(--b3); border: 1px solid rgba(0,230,207,.2);
+      color: var(--n3); font-size: .65rem; font-weight: 400; line-height: 1.5;
+      padding: .5rem .7rem; border-radius: 8px; width: 200px;
+      text-align: left; letter-spacing: 0; text-transform: none;
+      box-shadow: 0 8px 24px rgba(0,0,0,.4); z-index: 99; pointer-events: none;
+    }
+    .info-tip::after {
+      content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+      border: 5px solid transparent; border-top-color: var(--b3);
+    }
+    .info-icon:hover .info-tip,
+    .info-icon:focus .info-tip { display: block; }
+    body.light .info-tip { background: #042538; color: #dce8f5; }
+    body.light .info-tip::after { border-top-color: #042538; }
+
+    /* ── MODE TOGGLE ── */
+    .mode-toggle {
+      display: flex; gap: 0; background: var(--b2);
+      border-radius: 10px; padding: 3px; border: 1px solid rgba(255,255,255,.06);
+    }
+    .mode-btn {
+      flex: 1; background: transparent; border: none; color: var(--n4);
+      font-size: .72rem; font-weight: 600; border-radius: 8px;
+      padding: .35rem .6rem; cursor: pointer; font-family: inherit;
+      transition: background .15s, color .15s;
+    }
+    .mode-btn.on { background: var(--b3); color: var(--w); }
+    .mode-try {
+      font-size: .52rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em;
+      background: var(--prig); color: var(--pri);
+      border-radius: 99px; padding: 1px 6px; margin-left: 4px;
+      vertical-align: middle; border: 1px solid rgba(0,230,207,.2);
+    }
+    .mode-btn.on .mode-try { display: none; }
+    body.light .mode-toggle { background: #c8e6e4; border-color: rgba(0,0,0,.06); }
+    body.light .mode-btn { color: #555; }
+    body.light .mode-btn.on { background: rgba(0,200,180,.25); color: #111; }
+
+    /* ── CUSTOM CALCULATOR ── */
+    .custom-cats {
+      display: grid; grid-template-columns: repeat(5, 1fr); gap: .35rem;
+      margin-bottom: .75rem;
+    }
+    .cat-btn {
+      display: flex; flex-direction: column; align-items: center; gap: 3px;
+      background: var(--b1); border: 1px solid rgba(255,255,255,.06);
+      border-radius: 9px; padding: .45rem .2rem; cursor: pointer;
+      font-size: .9rem; font-family: inherit;
+      transition: background .15s, border-color .15s;
+    }
+    .cat-btn span { font-size: .55rem; color: var(--n4); font-weight: 600; }
+    .cat-btn.on { background: var(--prig); border-color: rgba(0,230,207,.3); }
+    .cat-btn.on span { color: var(--pri); }
+    .cat-btn:hover { border-color: rgba(0,230,207,.2); }
+    body.light .cat-btn { background: #d4ecea; border-color: rgba(0,0,0,.06); }
+    body.light .cat-btn span { color: #444; }
+    body.light .cat-btn.on { background: rgba(0,200,180,.2); border-color: rgba(0,180,160,.4); }
+    body.light .cat-btn.on span { color: #006a60; }
+
+    .custom-amount-row {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: .65rem; gap: .75rem;
+    }
+    .custom-amount-label {
+      font-size: .66rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase;
+      color: var(--n4); white-space: nowrap;
+    }
+    .custom-amount-input-wrap {
+      display: flex; align-items: center; gap: .3rem;
+      background: var(--b0); border: 1.5px solid rgba(0,230,207,.3);
+      border-radius: 8px; padding: .35rem .65rem;
+      transition: border-color .2s, box-shadow .2s;
+      box-shadow: 0 0 0 0 rgba(0,230,207,0);
+    }
+    .custom-amount-input-wrap:focus-within {
+      border-color: var(--pri);
+      box-shadow: 0 0 0 3px rgba(0,230,207,.12);
+    }
+    .custom-currency { font-size: .9rem; font-weight: 700; color: var(--n4); }
+    .custom-amount-input {
+      background: transparent; border: none; outline: none;
+      font-size: .95rem; font-weight: 700; color: var(--pri);
+      font-family: inherit; width: 90px; text-align: right; cursor: text;
+    }
+    .custom-amount-input::-webkit-inner-spin-button,
+    .custom-amount-input::-webkit-outer-spin-button { -webkit-appearance: none; }
+    body.light .custom-amount-input-wrap { background: #fff; border-color: rgba(0,180,160,.4); }
+    body.light .custom-amount-input-wrap:focus-within { border-color: var(--pri); box-shadow: 0 0 0 3px rgba(0,180,160,.15); }
+    body.light .custom-currency { color: #555; }
+
+    .mobile-labels { display: none; }
+    .mobile-pill { display: none; }
+    .mobile-event-badge { display: none; }
+    .mobile-country { display: none; }
+    .mobile-event-badge.event-ended { display: none !important; }
+
+    /* ── MOBILE ── */
+    @media (max-width: 900px) {
+      .mobile-labels {
+        display: flex; flex-direction: column; align-items: center;
+        order: -1; gap: .4rem;
+      }
+      .mobile-pill {
+        display: inline-block;
+        font-size: .65rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+        background: var(--prig); color: var(--pri);
+        border: 1px solid rgba(0,230,207,.2); border-radius: 99px; padding: 4px 14px;
+      }
+      body.light .mobile-pill { background: rgba(0,200,180,.12); }
+      .mobile-event-badge {
+        display: flex; align-items: center; gap: .4rem;
+        background: var(--ev2); border: 1px solid var(--ev3);
+        border-radius: 99px; padding: 3px 12px;
+        font-size: .65rem; font-weight: 700; color: var(--ev);
+      }
+      body.light .mobile-event-badge { background: rgba(80,140,20,.12); border-color: rgba(80,140,20,.4); color: #2d5a08; }
+      html, body { height: auto; overflow: auto; }
+
+      .app { display: block; height: auto; min-height: 100vh; }
+
+      nav {
+        position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+        padding: 0 1.5rem;
+        height: 56px;
+      }
+      .nav-pill { display: none; }
+      .nav-event { display: none; }
+
+      main {
+        display: flex; flex-direction: column;
+        padding: calc(56px + 1.25rem) 1.2rem 2rem;
+        gap: 2rem;
+        overflow: visible;
+      }
+
+      .left {
+        padding: 0; border-right: none;
+        border-bottom: 1px solid rgba(0,230,207,.08);
+        padding-bottom: 1.5rem;
+        gap: .9rem;
+      }
+
+      .center {
+        padding: .5rem 0;
+        order: 1;
+      }
+      .left  { order: 0; }
+      .right { order: 2; }
+      .mobile-country { display: flex; }
+      .desktop-country { display: none; }
+      .center::before { display: none; }
+
+      .jcard { width: 240px; }
+
+      .phone { width: 240px; height: 472px; border-radius: 40px; }
+      .ph-notch { width: 86px; height: 24px; border-radius: 0 0 15px 15px; }
+      .ph-time .t { font-size: 2.9rem; }
+      .ph-time { top: 56px; }
+      .ph-notifs { top: 166px; left: 10px; right: 10px; }
+      .ph-dots { bottom: 80px; }
+      .ph-btns { bottom: 24px; padding: 0 28px; }
+      .ph-btn { width: 40px; height: 40px; }
+      .ph-bezel { border-radius: 40px; }
+
+      .right {
+        padding: 0; border-left: none;
+        border-top: 1px solid rgba(0,230,207,.08);
+        padding-top: 1.5rem;
+        gap: .75rem;
+        justify-content: flex-start;
+      }
+
+      .metrics { grid-template-columns: 1fr 1fr; }
+      .m-val { font-size: 1.2rem; }
+      .m-val.big { font-size: 1.6rem; }
+
+      .modal { max-height: 90vh; overflow-y: auto; }
+      .modal-stores { flex-direction: column; }
+    }
+
+    @media (max-width: 480px) {
+      nav { padding: 0 1rem; }
+
+      main { padding: calc(56px + 1rem) .9rem 2rem; gap: 1.5rem; }
+
+      .jcard { width: 210px; }
+      .phone { width: 210px; height: 413px; border-radius: 36px; }
+      .ph-notch { width: 76px; height: 22px; }
+      .ph-time .t { font-size: 2.5rem; }
+      .ph-time { top: 50px; }
+      .ph-notifs { top: 145px; left: 8px; right: 8px; gap: 7px; }
+      .pn { padding: 8px 10px; gap: 7px; }
+      .ph-dots { bottom: 70px; }
+      .ph-btns { bottom: 20px; padding: 0 24px; }
+      .ph-btn { width: 36px; height: 36px; font-size: .8rem; }
+      .ph-bezel { border-radius: 36px; }
+
+      .tbr-rate { font-size: 1.2rem; }
+      .metrics { grid-template-columns: 1fr 1fr; gap: .35rem; }
+      .metric { padding: .5rem .65rem; }
+      .m-val { font-size: 1.1rem; }
+      .m-val.big { font-size: 1.4rem; }
+      .m-label { font-size: .55rem; }
+
+      .tier-markers { height: 40px; }
+      .tm-label { font-size: .52rem; }
+
+      .ref-code { font-size: 1.1rem; }
+    }
+
+    /* pulse dot */
+    @keyframes pulseRing {
+      0%   { transform: scale(.8); opacity: .8; }
+      100% { transform: scale(1.8); opacity: 0; }
+    }
+    .live-dot {
+      display: inline-block; width: 7px; height: 7px; border-radius: 50%;
+      background: var(--pri); position: relative; flex-shrink: 0; vertical-align: middle;
+    }
+    .live-dot::after {
+      content: ''; position: absolute; inset: -3px; border-radius: 50%;
+      background: var(--pri); opacity: .4;
+      animation: pulseRing 1.6s ease-out infinite;
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo">
+      <img src="https://jupiter.global/images/jup-logo.svg" width="24" height="24" alt="Jupiter" />
+      <span>Jupiter Card</span>
+    </div>
+    <div class="nav-pill">Jupiter Global Cashback Calculator</div>
+    <div style="display:flex;align-items:center;gap:.75rem">
+      <a class="nav-event" id="nav-event" href="https://x.com/JupiterExchange/status/2038634728149201140?s=20" target="_blank" rel="noopener">
+        <span class="nav-event-dot"></span>
+        2× Rewards Event · ends in <span class="nav-event-countdown" id="nav-countdown"></span>
+      </a>
+      <button class="nav-cta" onclick="openModal()">Get the Card →</button>
+    </div>
+  </nav>
+
+  <!-- MAIN: left | center(phone) | right -->
+  <main>
+
+    <!-- ── LEFT ── -->
+    <div class="left">
+
+      <div class="hero-text">
+        <h1>Earn <em>real money back</em><br>on every purchase</h1>
+        <p>Jupiter Visa Infinite · Up to 10% cashback · Powered by Solana</p>
+      </div>
+
+      <!-- Spend slider -->
+      <div class="ctrl-block">
+        <div class="ctrl-head">
+          <span class="ctrl-label">Monthly Spend</span>
+          <span class="ctrl-val" id="spend-display">$1,500</span>
+        </div>
+        <div class="range-wrap">
+          <div class="range-track"></div>
+          <div class="range-fill" id="spend-fill"></div>
+          <input type="range" id="spend-slider" min="100" max="10000" step="50" value="1500" />
+        </div>
+        <div class="range-mm"><span>$100</span><span>$10,000</span></div>
+      </div>
+
+      <!-- Referrals slider -->
+      <div class="ctrl-block">
+        <div class="ctrl-head">
+          <span class="ctrl-label">Referrals</span>
+          <span class="ctrl-val" id="refs-display">0 referrals</span>
+        </div>
+        <div class="range-wrap">
+          <div class="range-track"></div>
+          <div class="range-fill" id="refs-fill"></div>
+          <input type="range" id="refs-slider" min="0" max="100" step="1" value="0" />
+        </div>
+        <div class="tier-markers" id="tier-markers">
+          <div class="tm" id="tm0" onclick="jumpRefs(0)">
+            <div class="tm-dot"></div>
+            <div class="tm-label">Starter<br>4%</div>
+          </div>
+          <div class="tm" id="tm1" onclick="jumpRefs(20)">
+            <div class="tm-dot"></div>
+            <div class="tm-label">Level 1<br>5%</div>
+          </div>
+          <div class="tm" id="tm2" onclick="jumpRefs(50)">
+            <div class="tm-dot"></div>
+            <div class="tm-label">Level 2<br>8%</div>
+          </div>
+          <div class="tm" id="tm3" onclick="jumpRefs(100)">
+            <div class="tm-dot"></div>
+            <div class="tm-label">Level 3<br>10%</div>
+          </div>
+        </div>
+        <!-- Qualifying spend % -->
+        <div class="ctrl-head" style="margin-top:.3rem">
+          <span class="ctrl-label" style="font-size:.6rem;display:flex;align-items:center;gap:.3rem">
+            % hitting qualifying spend
+            <span class="info-icon" tabindex="0">
+              <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6.5" stroke="currentColor"/><line x1="7" y1="6" x2="7" y2="10.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><circle cx="7" cy="4" r=".8" fill="currentColor"/></svg>
+              <span class="info-tip" id="qual-info-tip">A referral counts when your friend spends $100 within 30 days of joining. You earn $25 USDC per successful referral. Use this slider to estimate what % of your friends actually hit that threshold.</span>
+            </span>
+          </span>
+          <span class="ctrl-val" style="font-size:.8rem" id="qual-pct-display">100%</span>
+        </div>
+        <div class="range-wrap">
+          <div class="range-track"></div>
+          <div class="range-fill" id="qual-fill"></div>
+          <input type="range" id="qual-slider" min="0" max="100" step="1" value="100" />
+        </div>
+        <div class="range-mm"><span>0%</span><span>100%</span></div>
+      </div>
+
+      <!-- Country selector (mobile only) -->
+      <div class="ctrl-block mobile-country" style="gap:.4rem">
+        <div class="ctrl-head">
+          <span class="ctrl-label">Spending country</span>
+          <span class="fee-badge" id="fee-badge-mobile">0% conversion fee</span>
+        </div>
+        <div class="country-select-wrap">
+          <select id="country-select-mobile" onchange="onCountryChangeMobile()">
+            <optgroup label="🇺🇸 USD (0% conversion fee)">
+              <option value="us">🇺🇸 United States</option>
+            </optgroup>
+            <optgroup label="Rain issuer — 1% conversion fee">
+              <option value="mx">🇲🇽 Mexico</option>
+              <option value="br">🇧🇷 Brazil</option>
+              <option value="ar">🇦🇷 Argentina</option>
+              <option value="ca">🇨🇦 Canada</option>
+              <option value="gb">🇬🇧 United Kingdom</option>
+              <option value="de">🇩🇪 Germany</option>
+              <option value="fr">🇫🇷 France</option>
+              <option value="es">🇪🇸 Spain</option>
+              <option value="it">🇮🇹 Italy</option>
+              <option value="nl">🇳🇱 Netherlands</option>
+              <option value="za">🇿🇦 South Africa</option>
+              <option value="ng">🇳🇬 Nigeria</option>
+              <option value="ae">🇦🇪 UAE</option>
+              <option value="sa">🇸🇦 Saudi Arabia</option>
+              <option value="in">🇮🇳 India</option>
+              <option value="hk">🇭🇰 Hong Kong</option>
+            </optgroup>
+            <optgroup label="DCS issuer — 1.8% conversion fee">
+              <option value="sg">🇸🇬 Singapore</option>
+              <option value="kr">🇰🇷 South Korea</option>
+              <option value="jp">🇯🇵 Japan</option>
+              <option value="vn">🇻🇳 Vietnam</option>
+              <option value="my">🇲🇾 Malaysia</option>
+              <option value="tw">🇹🇼 Taiwan</option>
+              <option value="au">🇦🇺 Australia</option>
+              <option value="th">🇹🇭 Thailand</option>
+              <option value="ph">🇵🇭 Philippines</option>
+            </optgroup>
+          </select>
+        </div>
+      </div>
+
+      <!-- Active tier badge -->
+      <div class="tier-badge-row">
+        <div class="tbr-left">
+          <div class="tbr-name" id="tbr-name">Starter</div>
+          <div class="tbr-refs" id="tbr-refs">No referrals needed</div>
+        </div>
+        <div class="tbr-rate" id="tbr-rate">4%</div>
+      </div>
+
+      <!-- Metrics -->
+      <div class="metrics">
+        <div class="metric hi" style="position:relative">
+          <div class="m-label"><span class="live-dot" style="margin-right:.35rem"></span>You could earn up to</div>
+          <div class="m-val big" id="m-monthly">$60.00</div>
+          <div class="m-sub">per month in cashback</div>
+          <div class="plus-divider">+</div>
+        </div>
+        <div class="metric hi" id="m-ref-card">
+          <div class="m-label">One-time referral bonuses</div>
+          <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap">
+            <div class="m-val big" id="m-ref-bonus">$0</div>
+            <a id="m-ref-event-badge" href="https://x.com/JupiterExchange/status/2038634728149201140?s=20" target="_blank" rel="noopener" style="display:none;font-size:.52rem;background:var(--ev2);color:var(--ev);border:1px solid var(--ev3);border-radius:99px;padding:2px 7px;font-weight:700;white-space:nowrap;text-decoration:none">2× event</a>
+          </div>
+          <div class="m-sub" id="m-ref-sub">refer 0 friends</div>
+        </div>
+        <div class="metric">
+          <div class="m-label">Annual cashback earnings</div>
+          <div class="m-val g" id="m-annual">$720</div>
+        </div>
+        <div class="metric">
+          <div class="m-label">Effective cashback (-fees)</div>
+          <div class="m-val g" id="m-eff">4.00%</div>
+        </div>
+        <div class="metric">
+          <div class="m-label">Monthly cashback cap</div>
+          <div class="m-val" id="m-cap">$100</div>
+        </div>
+        <div class="metric">
+          <div class="m-label">Referrals to next tier</div>
+          <div class="m-val" id="m-next">20 more</div>
+        </div>
+      </div>
+
+      <div class="cap-warn" id="cap-warn">
+        <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M7 2L13 12H1L7 2Z" stroke="#f5c542" stroke-width="1.2"/><line x1="7" y1="6" x2="7" y2="9" stroke="#f5c542" stroke-width="1.2" stroke-linecap="round"/><circle cx="7" cy="10.5" r=".6" fill="#f5c542"/></svg>
+        Spend exceeds cap — earnings are capped at the tier limit
+      </div>
+
+    </div>
+
+    <!-- Mobile labels (above everything on mobile) -->
+    <div class="mobile-labels">
+      <div class="mobile-pill">Jupiter Global Cashback Calculator</div>
+      <a class="mobile-event-badge" id="mobile-event-badge" href="https://x.com/JupiterExchange/status/2038634728149201140?s=20" target="_blank" rel="noopener">
+        <span class="nav-event-dot"></span>
+        2× Rewards Event · ends in <span id="mobile-countdown"></span>
+      </a>
+    </div>
+
+    <!-- ── CENTER: phone ── -->
+    <div class="center">
+
+      <!-- Jupiter card above phone -->
+      <div class="jcard" id="jcard" onclick="openModal()">
+        <div class="jcard-shine" id="jcard-shine"></div>
+        <div class="jc-arc1"></div><div class="jc-arc2"></div>
+        <div class="jc-logo">
+          <img src="https://jupiter.global/images/jup-logo.svg" width="15" height="15" alt="Jupiter" />
+          Jupiter
+        </div>
+        <div class="jc-visa"><div class="jc-visa-t">VISA</div><div class="jc-visa-s">Infinite</div></div>
+        <div class="jc-dots">★ ★ ★ ★ ★</div>
+      </div>
+
+      <!-- Phone -->
+      <div class="phone">
+        <div class="ph-screen"></div>
+        <div class="ph-bezel"></div>
+        <div class="ph-notch"></div>
+        <div class="ph-status">
+          <span id="ph-status-time">9:41</span>
+          <span class="ph-icons" style="display:flex;gap:3px;align-items:center">
+            <svg class="ph-icon-svg" width="11" height="7" viewBox="0 0 12 8"><rect x="0" y="3" width="2" height="5" rx="1"/><rect x="3" y="2" width="2" height="6" rx="1"/><rect x="6" y="1" width="2" height="7" rx="1"/><rect x="9" y="0" width="2" height="8" rx="1" opacity=".3"/></svg>
+            <svg class="ph-icon-svg ph-icon-batt" width="11" height="7" viewBox="0 0 12 8" fill="none"><rect x=".5" y=".5" width="9" height="7" rx="1.5" stroke="currentColor"/><rect x="2" y="2" width="5.5" height="4" rx=".5" fill="currentColor"/><rect x="10" y="2.5" width="1.5" height="3" rx=".75" fill="currentColor" opacity=".5"/></svg>
+          </span>
+        </div>
+        <div class="ph-time">
+          <div class="t" id="ph-time">9:41</div>
+          <div class="d" id="ph-date">Tuesday, 1 April</div>
+        </div>
+        <div class="ph-notifs">
+          <div class="pn" id="pn-purchase">
+            <div class="pn-icon" id="pni-icon">🛒</div>
+            <div class="pn-body">
+              <div class="pn-app">Jupiter Mobile</div>
+              <div class="pn-msg" id="pni-msg">You spent <span class="hi">$419.97</span> at Amazon.</div>
+            </div>
+            <div class="pn-t">1 min</div>
+          </div>
+          <div class="pn" id="pn-cashback">
+            <div class="pn-icon">💸</div>
+            <div class="pn-body">
+              <div class="pn-app">Jupiter Mobile</div>
+              <div class="pn-msg">You just earned <span class="hi" id="pni-earned">$16.80</span> back 💸</div>
+            </div>
+            <div class="pn-t">now</div>
+          </div>
+        </div>
+        <div class="ph-dots">
+          <span class="ph-dot on" id="pd0"></span>
+          <span class="ph-dot" id="pd1"></span>
+          <span class="ph-dot" id="pd2"></span>
+        </div>
+        <div class="ph-btns">
+          <div class="ph-btn" onclick="toggleTheme()" title="Toggle light/dark">🔦</div>
+          <div class="ph-btn" onclick="openModal()" title="Get the Card">💳</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ── RIGHT ── -->
+    <div class="right">
+
+      <!-- Country selector -->
+      <div class="ctrl-block desktop-country" style="gap:.4rem">
+        <div class="ctrl-head">
+          <span class="ctrl-label">Spending country</span>
+          <span class="fee-badge" id="fee-badge">0% conversion fee</span>
+        </div>
+        <div class="country-select-wrap">
+          <select id="country-select" onchange="onCountryChange()">
+            <optgroup label="🇺🇸 USD (0% conversion fee)">
+              <option value="us">🇺🇸 United States</option>
+            </optgroup>
+            <optgroup label="Rain issuer — 1% conversion fee">
+              <option value="mx">🇲🇽 Mexico</option>
+              <option value="br">🇧🇷 Brazil</option>
+              <option value="ar">🇦🇷 Argentina</option>
+              <option value="ca">🇨🇦 Canada</option>
+              <option value="gb">🇬🇧 United Kingdom</option>
+              <option value="de">🇩🇪 Germany</option>
+              <option value="fr">🇫🇷 France</option>
+              <option value="es">🇪🇸 Spain</option>
+              <option value="it">🇮🇹 Italy</option>
+              <option value="nl">🇳🇱 Netherlands</option>
+              <option value="za">🇿🇦 South Africa</option>
+              <option value="ng">🇳🇬 Nigeria</option>
+              <option value="ae">🇦🇪 UAE</option>
+              <option value="sa">🇸🇦 Saudi Arabia</option>
+              <option value="in">🇮🇳 India</option>
+              <option value="hk">🇭🇰 Hong Kong</option>
+            </optgroup>
+            <optgroup label="DCS issuer — 1.8% conversion fee">
+              <option value="sg">🇸🇬 Singapore</option>
+              <option value="kr">🇰🇷 South Korea</option>
+              <option value="jp">🇯🇵 Japan</option>
+              <option value="vn">🇻🇳 Vietnam</option>
+              <option value="my">🇲🇾 Malaysia</option>
+              <option value="tw">🇹🇼 Taiwan</option>
+              <option value="au">🇦🇺 Australia</option>
+              <option value="th">🇹🇭 Thailand</option>
+              <option value="ph">🇵🇭 Philippines</option>
+            </optgroup>
+          </select>
+        </div>
+      </div>
+
+      <!-- Mode toggle -->
+      <div class="mode-toggle">
+        <button class="mode-btn on" id="mode-examples" onclick="setMode('examples')">Examples</button>
+        <button class="mode-btn" id="mode-custom" onclick="setMode('custom')">Custom <span class="mode-try">try it out</span></button>
+      </div>
+
+      <!-- Examples panel -->
+      <div id="panel-examples">
+        <div class="ex-nav" style="margin-bottom:.75rem">
+          <button onclick="goEx(0)" id="ex0" class="ex-btn on">🛒 Amazon</button>
+          <button onclick="goEx(1)" id="ex1" class="ex-btn">🏨 Hotel</button>
+          <button onclick="goEx(2)" id="ex2" class="ex-btn">🍽️ Dinner</button>
+        </div>
+
+        <!-- Merchant header -->
+        <div class="pp-merchant">
+          <div class="pp-icon" id="pp-icon">🛒</div>
+          <div>
+            <div class="pp-name" id="pp-name">Amazon</div>
+            <div class="pp-cat" id="pp-cat">Electronics · Online</div>
+          </div>
+        </div>
+
+        <div class="pp-items" id="pp-items"></div>
+
+        <div class="pp-summary">
+          <div class="pp-summary-row net">
+            <span>Net saving (cashback − fees)</span>
+            <strong id="pp-net-save">+$16.80</strong>
+          </div>
+          <div class="pp-summary-row eff">
+            <span>Effective price paid</span>
+            <strong id="pp-eff-price">$403.17</strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- Custom panel -->
+      <div id="panel-custom" style="display:none">
+        <div class="custom-cats">
+          <button class="cat-btn on" data-cat="0" onclick="selectCat(0)">🛒<span>Shopping</span></button>
+          <button class="cat-btn" data-cat="1" onclick="selectCat(1)">🏨<span>Hotel</span></button>
+          <button class="cat-btn" data-cat="2" onclick="selectCat(2)">🍽️<span>Dining</span></button>
+          <button class="cat-btn" data-cat="3" onclick="selectCat(3)">✈️<span>Travel</span></button>
+          <button class="cat-btn" data-cat="4" onclick="selectCat(4)">⛽<span>Fuel</span></button>
+          <button class="cat-btn" data-cat="5" onclick="selectCat(5)">🛒<span>Groceries</span></button>
+          <button class="cat-btn" data-cat="6" onclick="selectCat(6)">💊<span>Health</span></button>
+          <button class="cat-btn" data-cat="7" onclick="selectCat(7)">🎮<span>Gaming</span></button>
+          <button class="cat-btn" data-cat="8" onclick="selectCat(8)">📱<span>Electronics</span></button>
+          <button class="cat-btn" data-cat="9" onclick="selectCat(9)">🧴<span>Beauty</span></button>
+        </div>
+
+        <div class="custom-amount-row">
+          <div class="custom-amount-label">Purchase amount</div>
+          <div class="custom-amount-input-wrap">
+            <span class="custom-currency">$</span>
+            <input type="number" id="custom-amount" class="custom-amount-input" value="200" min="1" max="100000" oninput="renderCustom()" />
+          </div>
+        </div>
+
+        <div class="pp-merchant" id="custom-merchant">
+          <div class="pp-icon" id="custom-icon">🛒</div>
+          <div>
+            <div class="pp-name" id="custom-name">Shopping</div>
+            <div class="pp-cat" id="custom-cat-label">General purchase</div>
+          </div>
+        </div>
+
+        <div class="pp-items" id="custom-items"></div>
+
+        <div class="pp-summary">
+          <div class="pp-summary-row net">
+            <span>Net saving (cashback − fees)</span>
+            <strong id="custom-net-save"></strong>
+          </div>
+          <div class="pp-summary-row eff">
+            <span>Effective price paid</span>
+            <strong id="custom-eff-price"></strong>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+</div>
+
+<!-- ── GET THE CARD MODAL ── -->
+<div class="modal-backdrop" id="modal-backdrop" onclick="closeModal()">
+  <div class="modal" onclick="event.stopPropagation()">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+
+    <div class="modal-logo">
+      <img src="https://jupiter.global/images/jup-logo.svg" width="32" height="32" alt="Jupiter" />
+      <span class="modal-title">Get the Jupiter Card</span>
+    </div>
+
+    <p class="modal-sub">Download the app, enter referral code, and start earning cashback on every purchase.</p>
+
+    <div class="modal-stores">
+      <a class="store-btn" href="https://apps.apple.com/nl/app/jupiter-mobile-solana-wallet/id6484069059" target="_blank">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+        <div class="store-btn-text">
+          <span class="store-label">Download on the</span>
+          <span class="store-name">App Store</span>
+        </div>
+      </a>
+      <a class="store-btn" href="https://play.google.com/store/apps/details?id=ag.jup.jupiter.android" target="_blank">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M3 20.5v-17c0-.83.94-1.3 1.6-.8l15 8.5c.6.35.6 1.25 0 1.6l-15 8.5c-.66.5-1.6.03-1.6-.8z"/></svg>
+        <div class="store-btn-text">
+          <span class="store-label">Get it on</span>
+          <span class="store-name">Google Play</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="modal-divider"><span>then enter referral code during sign-up</span></div>
+
+    <div class="modal-ref">
+      <div class="modal-ref-code" id="modal-ref-code">Z8V7RG2N</div>
+      <button class="ref-copy-btn" id="modal-copy-btn" onclick="copyRefCodeModal()">Copy code</button>
+    </div>
+
+    <div class="modal-ref-note">
+      Spend <strong>$1,000 within 30 days</strong> to unlock a sign-up bonus of <span style="display:inline-flex;align-items:center;gap:.35rem;vertical-align:middle"><span class="ref-bonus-amount" id="modal-signup-bonus">$100</span><span id="modal-signup-event" style="display:none;font-size:.62rem;background:var(--ev2);color:var(--ev);border:1px solid var(--ev3);border-radius:99px;padding:2px 7px;font-weight:700">2× event</span></span>
+    </div>
+  </div>
+</div>
+
+<script>
+const TIERS = [
+  { name:'Starter Cashback', rate:.04, cap:100,  refsMin:0,   refsMax:19,  refsLabel:'No referrals needed'  },
+  { name:'Level 1 Cashback', rate:.05, cap:200,  refsMin:20,  refsMax:49,  refsLabel:'20+ referrals'        },
+  { name:'Level 2 Cashback', rate:.08, cap:500,  refsMin:50,  refsMax:99,  refsLabel:'50+ referrals'        },
+  { name:'Level 3 Cashback', rate:.10, cap:1000, refsMin:100, refsMax:100, refsLabel:'100+ referrals'       },
+];
+
+const EXAMPLES = [
+  {
+    icon:'🛒', name:'Amazon', cat:'Electronics · Online',
+    items:[
+      { label:'Sony WH-1000XM5 Headphones', price:349.99 },
+      { label:'USB-C Hub 7-in-1',           price: 49.99 },
+      { label:'Phone Case',                 price: 19.99 },
+    ]
+  },
+  {
+    icon:'🏨', name:'Marriott Bonvoy', cat:'Hotel · 3 Nights',
+    items:[
+      { label:'Deluxe Room × 3 nights', price:540.00 },
+      { label:'Breakfast package',      price: 75.00 },
+      { label:'Parking',                price: 45.00 },
+    ]
+  },
+  {
+    icon:'🍽️', name:'Nobu Restaurant', cat:'Fine Dining',
+    items:[
+      { label:'Wagyu Beef Entrée × 2', price:190.00 },
+      { label:'Cocktails × 4',         price: 72.00 },
+      { label:'Dessert platter',        price: 38.00 },
+    ]
+  },
+];
+
+let spend   = 1500;
+let refs    = 0;
+let tierIdx = 0;
+let exIdx   = 0;
+let qualPct = 100;
+let fxRate  = 0;    // current FX fee rate
+
+const COUNTRIES = {
+  us: { fee: 0,     label: '0% conversion fee',   issuer: 'USD — no conversion' },
+  mx: { fee: 0.01,  label: '1% conversion fee',   issuer: 'Rain issuer' },
+  br: { fee: 0.01,  label: '1% conversion fee',   issuer: 'Rain issuer' },
+  ar: { fee: 0.01,  label: '1% conversion fee',   issuer: 'Rain issuer' },
+  ca: { fee: 0.01,  label: '1% conversion fee',   issuer: 'Rain issuer' },
+  gb: { fee: 0.01,  label: '1% conversion fee',   issuer: 'Rain issuer' },
+  de: { fee: 0.01,  label: '1% conversion fee',   issuer: 'Rain issuer' },
+  fr: { fee: 0.01,  label: '1% conversion fee',   issuer: 'Rain issuer' },
+  es: { fee: 0.01,  label: '1% conversion fee',   issuer: 'Rain issuer' },
+  it: { fee: 0.01,  label: '1% conversion fee',   issuer: 'Rain issuer' },
+  nl: { fee: 0.01,  label: '1% conversion fee',   issuer: 'Rain issuer' },
+  za: { fee: 0.01,  label: '1% conversion fee',   issuer: 'Rain issuer' },
+  ng: { fee: 0.01,  label: '1% conversion fee',   issuer: 'Rain issuer' },
+  ae: { fee: 0.01,  label: '1% conversion fee',   issuer: 'Rain issuer' },
+  sa: { fee: 0.01,  label: '1% conversion fee',   issuer: 'Rain issuer' },
+  in: { fee: 0.01,  label: '1% conversion fee',   issuer: 'Rain issuer' },
+  hk: { fee: 0.01,  label: '1% conversion fee',   issuer: 'Rain issuer' },
+  sg: { fee: 0.018, label: '1.8% conversion fee', issuer: 'DCS issuer' },
+  kr: { fee: 0.018, label: '1.8% conversion fee', issuer: 'DCS issuer' },
+  jp: { fee: 0.018, label: '1.8% conversion fee', issuer: 'DCS issuer' },
+  vn: { fee: 0.018, label: '1.8% conversion fee', issuer: 'DCS issuer' },
+  my: { fee: 0.018, label: '1.8% conversion fee', issuer: 'DCS issuer' },
+  tw: { fee: 0.018, label: '1.8% conversion fee', issuer: 'DCS issuer' },
+  au: { fee: 0.018, label: '1.8% conversion fee', issuer: 'DCS issuer' },
+  th: { fee: 0.018, label: '1.8% conversion fee', issuer: 'DCS issuer' },
+  ph: { fee: 0.018, label: '1.8% conversion fee', issuer: 'DCS issuer' },
+};
+
+function fmt(n)   { return '$' + n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+function fmtI(n)  { return '$' + Math.round(n).toLocaleString('en-US'); }
+function pct(r)   { return (r*100).toFixed(2)+'%'; }
+
+function refsToTier(r) {
+  if (r >= 100) return 3;
+  if (r >= 50)  return 2;
+  if (r >= 20)  return 1;
+  return 0;
+}
+
+function updateSliderFill(fillId, min, max, val) {
+  const fill = document.getElementById(fillId);
+  const w    = fill.parentElement.offsetWidth;
+  const pct  = (val - min) / (max - min);
+  fill.style.width = Math.round(10 + pct * (w - 20)) + 'px';
+}
+
+function update() {
+  const t      = TIERS[tierIdx];
+  const raw    = spend * t.rate;
+  const earned = Math.min(raw, t.cap);
+  const annual = earned * 12;
+  const fee    = spend * fxRate;
+  const eff    = spend > 0 ? (earned - fee) / spend : 0;
+  const capped = raw > t.cap;
+
+  // Left panel
+  document.getElementById('spend-display').textContent = fmt(spend).replace('.00','');
+  document.getElementById('refs-display').textContent  = refs === 1 ? '1 referral' : refs + ' referrals';
+  document.getElementById('tbr-name').textContent      = t.name;
+  document.getElementById('tbr-refs').textContent      = t.refsLabel;
+  document.getElementById('tbr-rate').textContent      = pct(t.rate);
+  document.getElementById('m-monthly').textContent     = fmt(earned);
+  document.getElementById('m-annual').textContent      = fmtI(annual);
+  const effEl = document.getElementById('m-eff');
+  effEl.textContent = pct(eff);
+  effEl.className   = eff >= 0 ? 'm-val g' : 'm-val' ;
+  effEl.style.color = eff < 0 ? '#f87171' : '';
+  document.getElementById('m-cap').textContent         = fmtI(t.cap);
+
+  // Next tier
+  const nextTierIdx = Math.min(tierIdx + 1, 3);
+  const nextTier    = TIERS[nextTierIdx];
+  if (tierIdx === 3) {
+    document.getElementById('m-next').textContent = 'Max tier!';
+  } else {
+    const need = nextTier.refsMin - refs;
+    document.getElementById('m-next').textContent = need + ' more';
+  }
+
+  document.getElementById('cap-warn').classList.toggle('show', capped);
+
+  // Slider fills
+  updateSliderFill('spend-fill', 100, 10000, spend);
+  updateSliderFill('refs-fill', 0, 100, refs);
+
+  // Tier markers
+  [0,1,2,3].forEach(i => {
+    const el = document.getElementById('tm' + i);
+    el.classList.toggle('reached', i <= tierIdx);
+    el.classList.toggle('current', i === tierIdx);
+  });
+
+  if (mode === 'custom') renderCustom(); else renderEx(exIdx, false);
+  updateRefLine();
+}
+
+
+function renderEx(idx, animate) {
+  const ex    = EXAMPLES[idx];
+  const t     = TIERS[tierIdx];
+  const total = ex.items.reduce((s,i) => s + i.price, 0);
+  const cb    = total * t.rate;
+  const fee   = total * fxRate;
+  const net   = cb - fee;
+  const effPrice = total + fee - cb;
+
+  document.getElementById('pp-icon').textContent      = ex.icon;
+  document.getElementById('pp-name').textContent      = ex.name;
+  document.getElementById('pp-cat').textContent       = ex.cat;
+
+  // Build items list
+  const container = document.getElementById('pp-items');
+  container.innerHTML = '';
+  ex.items.forEach(item => {
+    const d = document.createElement('div');
+    d.className = 'pp-item';
+    d.innerHTML = `<span>${item.label}</span><span>${fmt(item.price)}</span>`;
+    container.appendChild(d);
+  });
+
+  // Subtotal
+  const subRow = document.createElement('div');
+  subRow.className = 'pp-item tot';
+  subRow.innerHTML = `<span>Subtotal</span><span>${fmt(total)}</span>`;
+  container.appendChild(subRow);
+
+  // Conversion fee (FX)
+  if (fxRate > 0) {
+    const feeRow = document.createElement('div');
+    feeRow.className = 'pp-item';
+    feeRow.style.color = '#f87171';
+    feeRow.innerHTML = `<span>Conversion fee (FX) ${pct(fxRate)}</span><span>+${fmt(fee)}</span>`;
+    container.appendChild(feeRow);
+  }
+
+  // Cashback
+  const cbRow = document.createElement('div');
+  cbRow.className = 'pp-item';
+  cbRow.style.color = 'var(--pri)';
+  cbRow.innerHTML = `<span>Cashback ${pct(t.rate)}</span><span>−${fmt(cb)}</span>`;
+  container.appendChild(cbRow);
+
+  // Net saving & effective price
+  const netEl = document.getElementById('pp-net-save');
+  netEl.textContent = (net >= 0 ? '+' : '') + fmt(net);
+  netEl.style.color = net >= 0 ? 'var(--pri)' : '#f87171';
+  document.getElementById('pp-eff-price').textContent = fmt(effPrice);
+
+  // Phone notifications
+  document.getElementById('pni-icon').textContent   = ex.icon;
+  document.getElementById('pni-msg').innerHTML      = `You spent <span class="hi">${fmt(total + fee)}</span> at ${ex.name}.`;
+  document.getElementById('pni-earned').textContent = fmt(cb);
+
+  [0,1,2].forEach(i => document.getElementById('pd'+i).classList.toggle('on', i === idx));
+  [0,1,2].forEach(i => document.getElementById('ex'+i).classList.toggle('on', i === idx));
+
+  if (animate) triggerNotif();
+}
+
+function goEx(idx) {
+  exIdx = idx;
+  renderEx(idx, true);
+  resetCycle();
+}
+
+// ── MODE TOGGLE ──
+let mode = 'examples';
+function setMode(m) {
+  mode = m;
+  document.getElementById('panel-examples').style.display = m === 'examples' ? '' : 'none';
+  document.getElementById('panel-custom').style.display   = m === 'custom'   ? '' : 'none';
+  document.getElementById('mode-examples').classList.toggle('on', m === 'examples');
+  document.getElementById('mode-custom').classList.toggle('on', m === 'custom');
+  if (m === 'examples') {
+    resetCycle();
+    renderEx(exIdx, true);
+  } else {
+    clearInterval(cycleTimer);
+    renderCustom();
+  }
+}
+
+// ── CUSTOM CALCULATOR ──
+const CATEGORIES = [
+  { icon: '🛒', name: 'Shopping',    cat: 'General retail'       },
+  { icon: '🏨', name: 'Hotel',       cat: 'Accommodation'        },
+  { icon: '🍽️', name: 'Dining',      cat: 'Restaurants & bars'   },
+  { icon: '✈️', name: 'Travel',      cat: 'Flights & transport'  },
+  { icon: '⛽', name: 'Fuel',        cat: 'Gas station'          },
+  { icon: '🛒', name: 'Groceries',   cat: 'Supermarket'          },
+  { icon: '💊', name: 'Health',      cat: 'Pharmacy & wellness'  },
+  { icon: '🎮', name: 'Gaming',      cat: 'Games & subscriptions'},
+  { icon: '📱', name: 'Electronics', cat: 'Tech & gadgets'       },
+  { icon: '🧴', name: 'Beauty',      cat: 'Cosmetics & skincare' },
+];
+
+let customCatIdx = 0;
+
+function selectCat(idx) {
+  customCatIdx = idx;
+  document.querySelectorAll('.cat-btn').forEach((b, i) => b.classList.toggle('on', i === idx));
+  renderCustom();
+}
+
+function renderCustom() {
+  const cat    = CATEGORIES[customCatIdx];
+  const t      = TIERS[tierIdx];
+  const amount = Math.max(0, parseFloat(document.getElementById('custom-amount').value) || 0);
+  const rawCb  = amount * t.rate;
+  const cb     = Math.min(rawCb, t.cap);
+  const capped = rawCb > t.cap;
+  const fee    = amount * fxRate;
+  const net    = cb - fee;
+  const effPrice = amount + fee - cb;
+
+  document.getElementById('custom-icon').textContent       = cat.icon;
+  document.getElementById('custom-name').textContent       = cat.name;
+  document.getElementById('custom-cat-label').textContent  = cat.cat;
+
+  const container = document.getElementById('custom-items');
+  container.innerHTML = '';
+
+  const amtRow = document.createElement('div');
+  amtRow.className = 'pp-item tot';
+  amtRow.innerHTML = `<span>Purchase total</span><span>${fmt(amount)}</span>`;
+  container.appendChild(amtRow);
+
+  if (fxRate > 0) {
+    const feeRow = document.createElement('div');
+    feeRow.className = 'pp-item';
+    feeRow.style.color = '#f87171';
+    feeRow.innerHTML = `<span>Conversion fee (FX) ${pct(fxRate)}</span><span>+${fmt(fee)}</span>`;
+    container.appendChild(feeRow);
+  }
+
+  const cbRow = document.createElement('div');
+  cbRow.className = 'pp-item';
+  cbRow.style.color = 'var(--pri)';
+  cbRow.innerHTML = `<span>Cashback ${pct(t.rate)}${capped ? ' <span style="color:#f5c542;font-size:.6rem">(capped)</span>' : ''}</span><span>−${fmt(cb)}</span>`;
+  container.appendChild(cbRow);
+
+  const netEl = document.getElementById('custom-net-save');
+  netEl.textContent  = (net >= 0 ? '+' : '') + fmt(net);
+  netEl.style.color  = net >= 0 ? 'var(--pri)' : '#f87171';
+  document.getElementById('custom-eff-price').textContent = fmt(effPrice);
+
+  // Update phone
+  document.getElementById('pni-icon').textContent   = cat.icon;
+  document.getElementById('pni-msg').innerHTML      = `You spent <span class="hi">${fmt(amount + fee)}</span> on ${cat.name}.`;
+  document.getElementById('pni-earned').textContent = fmt(cb);
+  // show all dots unlit in custom mode
+  [0,1,2].forEach(i => document.getElementById('pd'+i).classList.remove('on'));
+  triggerNotif();
+}
+
+let notifTimer;
+function triggerNotif() {
+  const p = document.getElementById('pn-purchase');
+  const c = document.getElementById('pn-cashback');
+  p.classList.remove('in'); c.classList.remove('in');
+  clearTimeout(notifTimer);
+  setTimeout(() => p.classList.add('in'), 80);
+  notifTimer = setTimeout(() => c.classList.add('in'), 900);
+}
+
+let cycleTimer;
+function startCycle() {
+  cycleTimer = setInterval(() => {
+    exIdx = (exIdx + 1) % EXAMPLES.length;
+    renderEx(exIdx, true);
+  }, 4000);
+}
+function resetCycle() {
+  clearInterval(cycleTimer);
+  startCycle();
+}
+
+function updatePhoneTime() {
+  const now  = new Date();
+  const h    = now.getHours().toString().padStart(2,'0');
+  const m    = now.getMinutes().toString().padStart(2,'0');
+  const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const mons = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  document.getElementById('ph-time').textContent        = h + ':' + m;
+  document.getElementById('ph-status-time').textContent = h + ':' + m;
+  document.getElementById('ph-date').textContent = days[now.getDay()] + ', ' + now.getDate() + ' ' + mons[now.getMonth()];
+}
+
+
+
+function copyRefCodeModal() {
+  navigator.clipboard.writeText('Z8V7RG2N').then(() => {
+    const btn = document.getElementById('modal-copy-btn');
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy code'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
+function openModal() {
+  document.getElementById('modal-backdrop').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('modal-backdrop').classList.remove('open');
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+// ── CARD TILT ──
+(function() {
+  const card  = document.getElementById('jcard');
+  const shine = document.getElementById('jcard-shine');
+  const MAX   = 14; // max tilt degrees
+
+  card.addEventListener('mousemove', e => {
+    const r   = card.getBoundingClientRect();
+    const x   = (e.clientX - r.left) / r.width  - 0.5;  // -0.5 to 0.5
+    const y   = (e.clientY - r.top)  / r.height - 0.5;
+    const rx  =  y * -MAX;
+    const ry  =  x *  MAX;
+    card.style.transform = `perspective(600px) rotateX(${rx}deg) rotateY(${ry}deg) scale(1.03)`;
+    shine.style.opacity  = '1';
+    shine.style.background = `radial-gradient(circle at ${(x+0.5)*100}% ${(y+0.5)*100}%, rgba(255,255,255,.13) 0%, transparent 60%)`;
+  });
+
+  card.addEventListener('mouseleave', () => {
+    card.style.transform = 'perspective(600px) rotateX(0deg) rotateY(0deg) scale(1)';
+    shine.style.opacity  = '0';
+  });
+})();
+
+function toggleTheme() {
+  document.body.classList.toggle('light');
+}
+
+function applyCountry(code) {
+  const c = COUNTRIES[code];
+  fxRate  = c.fee;
+  // sync both selects
+  document.getElementById('country-select').value        = code;
+  document.getElementById('country-select-mobile').value = code;
+  // sync both badges
+  ['fee-badge', 'fee-badge-mobile'].forEach(id => {
+    const b = document.getElementById(id);
+    b.textContent = c.label;
+    b.classList.toggle('warn', fxRate > 0);
+  });
+  update();
+}
+
+function onCountryChange() {
+  applyCountry(document.getElementById('country-select').value);
+}
+
+function onCountryChangeMobile() {
+  applyCountry(document.getElementById('country-select-mobile').value);
+}
+
+// ── EVENT CONFIG ── easy to update for future events
+const EVENT = {
+  active:    true,                              // set false to disable entirely
+  end:       new Date('2026-04-05T23:59:59'),   // event end datetime
+  label:     '2× Rewards Event',
+  refBonus:  50,    // USDC per qualifying referral during event
+  signupBonus: 200, // USDC sign-up bonus for referred friend during event
+};
+const BASE = { refBonus: 25, signupBonus: 100 };
+
+function isEventActive() { return EVENT.active && new Date() <= EVENT.end; }
+function refBonus()      { return isEventActive() ? EVENT.refBonus  : BASE.refBonus; }
+function signupBonus()   { return isEventActive() ? EVENT.signupBonus : BASE.signupBonus; }
+
+function formatCountdown() {
+  const ms = EVENT.end - new Date();
+  if (ms <= 0) return null;
+  const d  = Math.floor(ms / 86400000);
+  const h  = Math.floor((ms % 86400000) / 3600000);
+  const m  = Math.floor((ms % 3600000)  / 60000);
+  const s  = Math.floor((ms % 60000)    / 1000);
+  if (d > 0) return `${d}d ${h}h ${m}m`;
+  if (h > 0) return `${h}h ${m}m ${s}s`;
+  return `${m}m ${s}s`;
+}
+
+function updateEventBanner() {
+  const cd = formatCountdown();
+  const navBanner    = document.getElementById('nav-event');
+  const mobileBanner = document.getElementById('mobile-event-badge');
+  const show = !!cd;
+  navBanner.style.display = show ? '' : 'none';
+  mobileBanner.classList.toggle('event-ended', !show);
+  if (show) {
+    document.getElementById('nav-countdown').textContent    = cd;
+    document.getElementById('mobile-countdown').textContent = cd;
+  }
+}
+
+function updateEventAmounts() {
+  const active = isEventActive();
+  const su     = '$' + signupBonus();
+  document.getElementById('modal-signup-bonus').textContent = su;
+  document.getElementById('modal-signup-event').style.display = active ? 'inline' : 'none';
+  document.getElementById('m-ref-event-badge').style.display  = active ? '' : 'none';
+
+  const rb = refBonus();
+  document.getElementById('qual-info-tip').textContent =
+    `A referral counts when your friend spends $100 within 30 days of joining. You earn $${rb} USDC per successful referral. Use this slider to estimate what % of your friends actually hit that threshold.`;
+}
+
+function updateRefLine() {
+  const qualifying = Math.round(refs * qualPct / 100);
+  const total      = qualifying * refBonus();
+
+  document.getElementById('m-ref-bonus').textContent = fmtI(total);
+  document.getElementById('m-ref-sub').textContent   =
+    refs === 0 ? 'no referrals yet'
+    : `${qualifying}/${refs} qualifying`;
+
+  updateSliderFill('qual-fill', 0, 100, qualPct);
+  document.getElementById('qual-pct-display').textContent = qualPct + '%';
+}
+
+function positionMarkers() {
+  const wrap = document.getElementById('refs-slider').parentElement;
+  const w = wrap.offsetWidth;
+  if (!w) return;
+  const items = [
+    { id:'tm0', val:0,   xform:'translateX(0)'    },
+    { id:'tm1', val:20,  xform:'translateX(-50%)'  },
+    { id:'tm2', val:50,  xform:'translateX(-50%)'  },
+    { id:'tm3', val:100, xform:'translateX(-100%)' },
+  ];
+  items.forEach(({ id, val, xform }) => {
+    const el = document.getElementById(id);
+    el.style.left      = Math.round(10 + (val / 100) * (w - 20)) + 'px';
+    el.style.transform = xform;
+  });
+}
+
+function jumpRefs(val) {
+  refs    = val;
+  tierIdx = refsToTier(val);
+  document.getElementById('refs-slider').value = val;
+  update();
+}
+
+// Events
+document.getElementById('spend-slider').addEventListener('input', e => {
+  spend = parseInt(e.target.value);
+  update();
+});
+
+document.getElementById('refs-slider').addEventListener('input', e => {
+  refs    = parseInt(e.target.value);
+  tierIdx = refsToTier(refs);
+  update();
+});
+
+document.getElementById('qual-slider').addEventListener('input', e => {
+  qualPct = parseInt(e.target.value);
+  updateRefLine();
+});
+
+// Init
+positionMarkers();
+window.addEventListener('resize', positionMarkers);
+updatePhoneTime();
+setInterval(updatePhoneTime, 10000);
+updateEventBanner();
+updateEventAmounts();
+setInterval(() => { updateEventBanner(); updateEventAmounts(); updateRefLine(); }, 1000);
+update();
+triggerNotif();
+startCycle();
+</script>
+</body>
+</html>
