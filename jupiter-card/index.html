@@ -765,6 +765,8 @@
       html, body { height: auto; overflow: auto; }
 
       .app { display: block; height: auto; min-height: 100vh; }
+      #credit-desktop { display: none !important; }
+      #credit-mobile { display: block !important; }
 
       nav {
         position: fixed; top: 0; left: 0; right: 0; z-index: 100;
@@ -1261,6 +1263,15 @@
     </div>
 
   </main>
+
+  <!-- Desktop: fixed bottom-right label -->
+  <div id="credit-desktop" style="position:fixed;bottom:.75rem;right:1rem;font-size:.72rem;color:var(--n5);pointer-events:none;z-index:10;">
+    Made with 💚 by <a href="https://x.com/SyotoshiX" target="_blank" rel="noopener" style="color:var(--n4);text-decoration:none;pointer-events:all;">@SyotoshiX</a>
+  </div>
+  <!-- Mobile: footer bar -->
+  <footer id="credit-mobile" style="display:none;text-align:center;padding:.75rem 1rem;font-size:.72rem;color:var(--n5);">
+    Made with 💚 by <a href="https://x.com/SyotoshiX" target="_blank" rel="noopener" style="color:var(--n4);text-decoration:none;">@SyotoshiX</a>
+  </footer>
 </div>
 
 <!-- ── GET THE CARD MODAL ── -->
