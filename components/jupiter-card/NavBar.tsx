@@ -46,6 +46,7 @@ export default function NavBar({ countdown, onOpenModal }: NavBarProps) {
             href="https://x.com/JupiterExchange/status/2038634728149201140?s=20"
             target="_blank"
             rel="noopener"
+            className="nav-event-badge"
             style={{
               display: 'flex', alignItems: 'center', gap: '.45rem',
               background: 'var(--ev2)', border: '1px solid var(--ev3)',
@@ -78,6 +79,7 @@ export default function NavBar({ countdown, onOpenModal }: NavBarProps) {
       <style>{`
         @media (max-width: 900px) {
           .nav-pill-desktop { display: none !important; }
+          .nav-event-badge { display: none !important; }
         }
         body.light nav {
           background: rgba(232,248,246,.95) !important;
