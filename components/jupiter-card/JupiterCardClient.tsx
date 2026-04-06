@@ -70,12 +70,15 @@ export default function JupiterCardClient() {
   let notifMsg: string
   let notifEarned: string
 
+  const countryData = COUNTRIES[country]
+  const countrySuffix = countryData ? ` in ${countryData.flag} ${countryData.name}` : ''
+
   if (mode === 'examples') {
     const exTotal = currentEx.items.reduce((s, i) => s + i.price, 0)
     const exFee = exTotal * fxRate
     const exCb = exTotal * tier.rate
     notifIcon = currentEx.icon
-    notifMsg = `You spent <span class="hi">${fmt(exTotal + exFee)}</span> at ${currentEx.name}.`
+    notifMsg = `You spent <span class="hi">${fmt(exTotal + exFee)}</span> at ${currentEx.name}${countrySuffix}.`
     notifEarned = fmt(exCb)
   } else {
     const amount = Math.max(0, customAmount)
@@ -83,7 +86,7 @@ export default function JupiterCardClient() {
     const cb = Math.min(rawCb, tier.cap)
     const feeAmt = amount * fxRate
     notifIcon = currentCat.icon
-    notifMsg = `You spent <span class="hi">${fmt(amount + feeAmt)}</span> on ${currentCat.name}.`
+    notifMsg = `You spent <span class="hi">${fmt(amount + feeAmt)}</span> on ${currentCat.name}${countrySuffix}.`
     notifEarned = fmt(cb)
   }
 
@@ -266,33 +269,71 @@ export default function JupiterCardClient() {
         <option value="us">🇺🇸 United States</option>
       </optgroup>
       <optgroup label="Rain issuer — 1% conversion fee">
-        <option value="mx">🇲🇽 Mexico</option>
-        <option value="br">🇧🇷 Brazil</option>
+        <option value="ag">🇦🇬 Antigua &amp; Barbuda</option>
         <option value="ar">🇦🇷 Argentina</option>
-        <option value="ca">🇨🇦 Canada</option>
-        <option value="gb">🇬🇧 United Kingdom</option>
-        <option value="de">🇩🇪 Germany</option>
-        <option value="fr">🇫🇷 France</option>
-        <option value="es">🇪🇸 Spain</option>
-        <option value="it">🇮🇹 Italy</option>
-        <option value="nl">🇳🇱 Netherlands</option>
-        <option value="za">🇿🇦 South Africa</option>
-        <option value="ng">🇳🇬 Nigeria</option>
         <option value="ae">🇦🇪 UAE</option>
-        <option value="sa">🇸🇦 Saudi Arabia</option>
-        <option value="in">🇮🇳 India</option>
+        <option value="bb">🇧🇧 Barbados</option>
+        <option value="bd">🇧🇩 Bangladesh</option>
+        <option value="bo">🇧🇴 Bolivia</option>
+        <option value="br">🇧🇷 Brazil</option>
+        <option value="bs">🇧🇸 Bahamas</option>
+        <option value="bz">🇧🇿 Belize</option>
+        <option value="ca">🇨🇦 Canada</option>
+        <option value="ci">🇨🇮 Côte d&apos;Ivoire</option>
+        <option value="co">🇨🇴 Colombia</option>
+        <option value="cr">🇨🇷 Costa Rica</option>
+        <option value="de">🇩🇪 Germany</option>
+        <option value="dm">🇩🇲 Dominica</option>
+        <option value="do">🇩🇴 Dominican Republic</option>
+        <option value="ec">🇪🇨 Ecuador</option>
+        <option value="eg">🇪🇬 Egypt</option>
+        <option value="es">🇪🇸 Spain</option>
+        <option value="fr">🇫🇷 France</option>
+        <option value="gb">🇬🇧 United Kingdom</option>
+        <option value="gd">🇬🇩 Grenada</option>
+        <option value="gh">🇬🇭 Ghana</option>
+        <option value="gt">🇬🇹 Guatemala</option>
+        <option value="gy">🇬🇾 Guyana</option>
         <option value="hk">🇭🇰 Hong Kong</option>
+        <option value="hn">🇭🇳 Honduras</option>
+        <option value="in">🇮🇳 India</option>
+        <option value="it">🇮🇹 Italy</option>
+        <option value="ke">🇰🇪 Kenya</option>
+        <option value="kn">🇰🇳 Saint Kitts &amp; Nevis</option>
+        <option value="ky">🇰🇾 Cayman Islands</option>
+        <option value="lc">🇱🇨 Saint Lucia</option>
+        <option value="ma">🇲🇦 Morocco</option>
+        <option value="mx">🇲🇽 Mexico</option>
+        <option value="ng">🇳🇬 Nigeria</option>
+        <option value="nl">🇳🇱 Netherlands</option>
+        <option value="pa">🇵🇦 Panama</option>
+        <option value="pe">🇵🇪 Peru</option>
+        <option value="pk">🇵🇰 Pakistan</option>
+        <option value="py">🇵🇾 Paraguay</option>
+        <option value="sa">🇸🇦 Saudi Arabia</option>
+        <option value="sn">🇸🇳 Senegal</option>
+        <option value="sr">🇸🇷 Suriname</option>
+        <option value="sv">🇸🇻 El Salvador</option>
+        <option value="tc">🇹🇨 Turks &amp; Caicos Islands</option>
+        <option value="tt">🇹🇹 Trinidad &amp; Tobago</option>
+        <option value="ug">🇺🇬 Uganda</option>
+        <option value="uy">🇺🇾 Uruguay</option>
+        <option value="vc">🇻🇨 Saint Vincent &amp; the Grenadines</option>
+        <option value="za">🇿🇦 South Africa</option>
+        <option value="zm">🇿🇲 Zambia</option>
       </optgroup>
       <optgroup label="DCS issuer — 1.8% conversion fee">
-        <option value="sg">🇸🇬 Singapore</option>
-        <option value="kr">🇰🇷 South Korea</option>
-        <option value="jp">🇯🇵 Japan</option>
-        <option value="vn">🇻🇳 Vietnam</option>
-        <option value="my">🇲🇾 Malaysia</option>
-        <option value="tw">🇹🇼 Taiwan</option>
         <option value="au">🇦🇺 Australia</option>
-        <option value="th">🇹🇭 Thailand</option>
+        <option value="id">🇮🇩 Indonesia</option>
+        <option value="jp">🇯🇵 Japan</option>
+        <option value="kr">🇰🇷 South Korea</option>
+        <option value="my">🇲🇾 Malaysia</option>
+        <option value="nz">🇳🇿 New Zealand</option>
         <option value="ph">🇵🇭 Philippines</option>
+        <option value="sg">🇸🇬 Singapore</option>
+        <option value="th">🇹🇭 Thailand</option>
+        <option value="tw">🇹🇼 Taiwan</option>
+        <option value="vn">🇻🇳 Vietnam</option>
       </optgroup>
     </>
   )
