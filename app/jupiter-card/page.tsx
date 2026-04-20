@@ -2,19 +2,19 @@ import type { Metadata } from 'next'
 import JupiterCardClient from '@/components/jupiter-card/JupiterCardClient'
 
 export const metadata: Metadata = {
-  title: 'Jupiter Card - Cashback Calculator',
+  title: 'Jupiter Global Visa Card Cashback Calculator — Earn Up to 10% Back',
   description:
-    'Calculate your cashback earnings with the Jupiter Global Visa Infinite card. Estimate rewards across spending tiers, referral bonuses, and cross-border fees.',
+    'Calculate your Jupiter Global Visa Infinite card rewards. Estimate cashback earnings across spending tiers, referral bonuses, and cross-border fees. Powered by Solana.',
   robots: 'index, follow, max-image-preview:large',
   alternates: {
     canonical: 'https://www.syotoshi.com/jupiter-card',
   },
   openGraph: {
     type: 'website',
-    siteName: 'Jupiter Card Calculator',
-    title: 'Jupiter Card - Cashback Calculator',
+    siteName: 'Jupiter Global Visa Card Cashback Calculator',
+    title: 'Jupiter Global Visa Card Cashback Calculator — Earn Up to 10% Back',
     description:
-      'Calculate your cashback earnings with the Jupiter Global Visa Infinite card. Estimate rewards across spending tiers, referral bonuses, and cross-border fees.',
+      'Calculate your Jupiter Global Visa Infinite card rewards. Estimate cashback earnings across spending tiers, referral bonuses, and cross-border fees. Powered by Solana.',
     url: 'https://www.syotoshi.com/jupiter-card',
     images: [
       {
@@ -28,20 +28,11 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     site: '@JupiterExchange',
-    title: 'Jupiter Card - Cashback Calculator',
+    creator: '@SyotoshiX',
+    title: 'Jupiter Global Visa Card Cashback Calculator — Earn Up to 10% Back',
     description:
-      'Calculate your cashback earnings with the Jupiter Global Visa Infinite card. Estimate rewards across spending tiers, referral bonuses, and cross-border fees.',
+      'Calculate your Jupiter Global Visa Infinite card rewards. Estimate cashback earnings across spending tiers, referral bonuses, and cross-border fees. Powered by Solana.',
     images: ['https://www.syotoshi.com/jupiter-card/og-image.png'],
-  },
-  icons: {
-    icon: [
-      { url: '/jupiter-card/favicon/favicon.ico', type: 'image/x-icon' },
-      { url: '/jupiter-card/favicon/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
-      { url: '/jupiter-card/favicon/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
-    ],
-    apple: [
-      { url: '/jupiter-card/favicon/apple-touch-icon.png', sizes: '180x180' },
-    ],
   },
 }
 
@@ -54,9 +45,9 @@ export default function JupiterCardPage() {
           __html: JSON.stringify({
             '@context': 'https://schema.org',
             '@type': 'WebApplication',
-            name: 'Jupiter Card Cashback Calculator',
+            name: 'Jupiter Global Visa Card Cashback Calculator',
             description:
-              'Calculate your cashback earnings with the Jupiter Global Visa Infinite card. Estimate rewards across spending tiers, referral bonuses, and cross-border fees.',
+              'Calculate your Jupiter Global Visa Infinite card rewards. Estimate cashback earnings across spending tiers, referral bonuses, and cross-border fees. Powered by Solana.',
             url: 'https://www.syotoshi.com/jupiter-card',
             applicationCategory: 'FinanceApplication',
             operatingSystem: 'Any',

@@ -1,19 +1,22 @@
 'use client'
 
-interface PhoneMockupProps {
-  phoneTime: string
-  phoneDate: string
-  notifIcon: string
-  notifMsg: string
-  notifEarned: string
-  purchaseIn: boolean
-  cashbackIn: boolean
+import Image from 'next/image'
+
+interface KastPhoneMockupProps {
+  phoneTime:    string
+  phoneDate:    string
+  notifIcon:    string
+  notifMsg:     string
+  notifEarned:  string
+  purchaseIn:   boolean
+  cashbackIn:   boolean
   activeExample: number
+  accentColor:  string   // primary colour for active dot + .hi highlight
   onToggleTheme: () => void
-  onOpenModal: () => void
+  onOpenModal:   () => void
 }
 
-export default function PhoneMockup({
+export default function KastPhoneMockup({
   phoneTime,
   phoneDate,
   notifIcon,
@@ -22,9 +25,10 @@ export default function PhoneMockup({
   purchaseIn,
   cashbackIn,
   activeExample,
+  accentColor,
   onToggleTheme,
   onOpenModal,
-}: PhoneMockupProps) {
+}: KastPhoneMockupProps) {
   return (
     <div className="phone">
       <div className="ph-screen" />
@@ -53,15 +57,14 @@ export default function PhoneMockup({
       <div className="ph-notifs">
         <div className={`pn${purchaseIn ? ' in' : ''}`}>
           <div className="pn-icon">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="https://jupiter.global/images/jup-logo.svg" alt="Jupiter" width={28} height={28} style={{ objectFit: 'contain' }} />
+            <Image src="/kast-card/logo.png" alt="KAST" width={28} height={28} style={{ objectFit: 'contain' }} />
           </div>
           <div className="pn-body">
             <div className="pn-app" style={{ display: 'flex', alignItems: 'center', gap: 3 }}>
-              Jupiter Mobile <span>{notifIcon}</span>
+              KAST <span>{notifIcon}</span>
             </div>
             <div
-              className="pn-msg"
+              className="pn-msg kast-hi-msg"
               dangerouslySetInnerHTML={{ __html: notifMsg }}
             />
           </div>
@@ -69,14 +72,13 @@ export default function PhoneMockup({
         </div>
         <div className={`pn${cashbackIn ? ' in' : ''}`}>
           <div className="pn-icon">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="https://jupiter.global/images/jup-logo.svg" alt="Jupiter" width={28} height={28} style={{ objectFit: 'contain' }} />
+            <Image src="/kast-card/logo.png" alt="KAST" width={28} height={28} style={{ objectFit: 'contain' }} />
           </div>
           <div className="pn-body">
             <div className="pn-app" style={{ display: 'flex', alignItems: 'center', gap: 3 }}>
-              Jupiter Mobile <span>💸</span>
+              KAST <span>💸</span>
             </div>
-            <div className="pn-msg">
+            <div className="pn-msg kast-hi-msg">
               You just earned <span className="hi">{notifEarned}</span> back 💸
             </div>
           </div>
@@ -84,14 +86,20 @@ export default function PhoneMockup({
         </div>
       </div>
       <div className="ph-dots">
-        <span className={`ph-dot${activeExample === 0 ? ' on' : ''}`} />
-        <span className={`ph-dot${activeExample === 1 ? ' on' : ''}`} />
-        <span className={`ph-dot${activeExample === 2 ? ' on' : ''}`} />
+        <span className={`ph-dot${activeExample === 0 ? ' kast-dot-on' : ''}`} />
+        <span className={`ph-dot${activeExample === 1 ? ' kast-dot-on' : ''}`} />
+        <span className={`ph-dot${activeExample === 2 ? ' kast-dot-on' : ''}`} />
       </div>
       <div className="ph-btns">
         <div className="ph-btn" onClick={onToggleTheme} title="Toggle light/dark">🔦</div>
         <div className="ph-btn" onClick={onOpenModal} title="Get the Card">💳</div>
       </div>
+
+      {/* Override teal accent with the current Kast card's colour */}
+      <style suppressHydrationWarning>{`
+        .kast-hi-msg .hi { color: ${accentColor}; font-weight: 700; }
+        .ph-dot.kast-dot-on { background: ${accentColor}; }
+      `}</style>
     </div>
   )
 }

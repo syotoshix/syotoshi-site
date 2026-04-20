@@ -25,10 +25,15 @@ export default function GetCardModal({
     return () => document.removeEventListener('keydown', onKeyDown)
   }, [onClose])
 
+  useEffect(() => {
+    if (open) (window as any).umami?.track('jupiter-modal-open')
+  }, [open])
+
   function copyCode() {
     navigator.clipboard.writeText('Z8V7RG2N').then(() => {
       setCopied(true)
       setTimeout(() => setCopied(false), 2000)
+      ;(window as any).umami?.track('jupiter-copy-code')
     })
   }
 
@@ -93,7 +98,7 @@ export default function GetCardModal({
             href="https://apps.apple.com/nl/app/jupiter-mobile-solana-wallet/id6484069059"
             target="_blank"
             rel="noopener"
-            data-umami-event="referral-click-appstore"
+            data-umami-event="jupiter-click-appstore"
             style={{
               flex: 1, display: 'flex', alignItems: 'center', gap: '.55rem',
               background: 'var(--b2)', border: '1px solid rgba(0,230,207,.12)',
@@ -124,7 +129,7 @@ export default function GetCardModal({
             href="https://play.google.com/store/apps/details?id=ag.jup.jupiter.android"
             target="_blank"
             rel="noopener"
-            data-umami-event="referral-click-playstore"
+            data-umami-event="jupiter-click-playstore"
             style={{
               flex: 1, display: 'flex', alignItems: 'center', gap: '.55rem',
               background: 'var(--b2)', border: '1px solid rgba(0,230,207,.12)',
