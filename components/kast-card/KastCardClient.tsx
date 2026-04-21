@@ -498,7 +498,7 @@ export default function KastCardClient() {
             display: 'grid',
             gridTemplateColumns: '1fr clamp(420px, 38vw, 560px) 1fr',
             alignItems: 'center',
-            padding: '1.2rem 2rem',
+            padding: '.6rem 2rem',
             gap: 0,
             overflow: 'hidden',
           }}
@@ -509,9 +509,9 @@ export default function KastCardClient() {
           <div
             style={{
               display: 'flex', flexDirection: 'column',
-              padding: '1.1rem 1.8rem 1.1rem 0',
+              padding: '.5rem 1.8rem .5rem 0',
               borderRight: '1px solid rgba(79,156,249,.08)',
-              overflow: 'hidden', gap: '.8rem',
+              overflow: 'hidden', gap: '.5rem',
             }}
             className="left-panel"
           >
@@ -528,17 +528,17 @@ export default function KastCardClient() {
 
             {/* Hero */}
             <div>
-              <h1 style={{ fontSize: '1.3rem', fontWeight: 800, letterSpacing: '-.03em', lineHeight: 1.2 }}>
+              <h1 style={{ fontSize: '1.15rem', fontWeight: 800, letterSpacing: '-.03em', lineHeight: 1.2 }}>
                 Earn <em style={{ fontStyle: 'normal', color: th.pri }}>real money back</em>
                 <br />on every purchase
               </h1>
-              <p style={{ fontSize: '.73rem', color: 'var(--n4)', lineHeight: 1.5, marginTop: '.25rem' }}>
+              <p style={{ fontSize: '.73rem', color: 'var(--n4)', lineHeight: 1.5, marginTop: '.15rem' }}>
                 KAST Visa Card · Up to 12% cashback · 170+ countries
               </p>
             </div>
 
             {/* Monthly Spend Slider */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '.45rem' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '.3rem' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <span style={{ fontSize: '.66rem', fontWeight: 600, letterSpacing: '.1em', textTransform: 'uppercase', color: 'var(--n4)' }}>
                   Monthly Spend
@@ -558,7 +558,7 @@ export default function KastCardClient() {
             </div>
 
             {/* Referrals Slider */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '.45rem' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '.3rem' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <span style={{ display: 'flex', alignItems: 'center', gap: '.3rem' }}>
                   <span style={{ fontSize: '.66rem', fontWeight: 600, letterSpacing: '.1em', textTransform: 'uppercase', color: 'var(--n4)' }}>
@@ -651,7 +651,7 @@ export default function KastCardClient() {
             {/* Active card / tier badge */}
             <div style={{
               display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-              padding: '.6rem .8rem',
+              padding: '.45rem .8rem',
               background: `${th.arcClr}0.13)`, border: `1px solid ${th.arcClr}0.2)`,
               borderRadius: '10px',
             }}>
@@ -674,19 +674,19 @@ export default function KastCardClient() {
             </div>
 
             {/* Metrics grid */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '.45rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '.3rem' }}>
 
               {/* Total monthly */}
               <div className="metric-hi" style={{
                 background: 'linear-gradient(135deg, #030b1a, #020814)',
                 border: '1px solid rgba(79,156,249,.2)',
-                borderRadius: '12px', padding: '.65rem .8rem', position: 'relative',
+                borderRadius: '12px', padding: '.45rem .7rem', position: 'relative',
               }}>
                 <div style={{ fontSize: '.6rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '.09em', color: 'var(--n5)', marginBottom: '.2rem' }}>
                   <span className="live-dot" style={{ marginRight: '.35rem' }} />
                   Total / month
                 </div>
-                <div style={{ fontSize: '1.9rem', fontWeight: 800, letterSpacing: '-.03em', color: th.pri }}>
+                <div style={{ fontSize: '1.6rem', fontWeight: 800, letterSpacing: '-.03em', color: th.pri }}>
                   ~{fmt(totalUsd)}
                 </div>
                 <div style={{ fontSize: '.63rem', color: 'var(--n5)', marginTop: '.1rem' }}>KAST + MOVE combined</div>
@@ -703,12 +703,12 @@ export default function KastCardClient() {
               <div className="metric-hi" style={{
                 background: 'linear-gradient(135deg, #030b1a, #020814)',
                 border: '1px solid rgba(79,156,249,.2)',
-                borderRadius: '12px', padding: '.65rem .8rem',
+                borderRadius: '12px', padding: '.45rem .7rem',
               }}>
                 <div style={{ fontSize: '.6rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '.09em', color: 'var(--n5)', marginBottom: '.2rem' }}>
                   Referral KAST points
                 </div>
-                <div style={{ fontSize: '1.9rem', fontWeight: 800, letterSpacing: '-.03em', color: th.pri }}>
+                <div style={{ fontSize: '1.6rem', fontWeight: 800, letterSpacing: '-.03em', color: th.pri }}>
                   {refs === 0 ? '$0' : '~' + fmt(totalRefUsd)}
                 </div>
                 <div style={{ fontSize: '.63rem', color: 'var(--n5)', marginTop: '.1rem' }}>
@@ -717,11 +717,11 @@ export default function KastCardClient() {
               </div>
 
               {/* KAST Points earned */}
-              <div style={{ background: 'var(--b1)', border: '1px solid rgba(255,255,255,.05)', borderRadius: '12px', padding: '.65rem .8rem' }}>
+              <div style={{ background: 'var(--b1)', border: '1px solid rgba(255,255,255,.05)', borderRadius: '12px', padding: '.45rem .7rem' }}>
                 <div style={{ fontSize: '.6rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '.09em', color: 'var(--n5)', marginBottom: '.2rem' }}>
                   KAST Points / month
                 </div>
-                <div style={{ fontSize: '1.4rem', fontWeight: 800, letterSpacing: '-.03em', color: th.pri }}>
+                <div style={{ fontSize: '1.2rem', fontWeight: 800, letterSpacing: '-.03em', color: th.pri }}>
                   ~{fmt(kastUsd)}
                 </div>
                 <div style={{ fontSize: '.58rem', color: 'var(--n5)', marginTop: '.15rem' }}>
@@ -730,11 +730,11 @@ export default function KastCardClient() {
               </div>
 
               {/* MOVE / month */}
-              <div style={{ background: 'var(--b1)', border: '1px solid rgba(255,255,255,.05)', borderRadius: '12px', padding: '.65rem .8rem' }}>
+              <div style={{ background: 'var(--b1)', border: '1px solid rgba(255,255,255,.05)', borderRadius: '12px', padding: '.45rem .7rem' }}>
                 <div style={{ fontSize: '.6rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '.09em', color: 'var(--n5)', marginBottom: '.2rem' }}>
                   MOVE tokens / month
                 </div>
-                <div style={{ fontSize: '1.4rem', fontWeight: 800, letterSpacing: '-.03em', color: th.pri }}>
+                <div style={{ fontSize: '1.2rem', fontWeight: 800, letterSpacing: '-.03em', color: th.pri }}>
                   ~{fmt(moveUsd)}
                 </div>
                 <div style={{ fontSize: '.58rem', color: 'var(--n5)', marginTop: '.15rem' }}>
@@ -749,16 +749,16 @@ export default function KastCardClient() {
               </div>
 
               {/* Annual total */}
-              <div style={{ background: 'var(--b1)', border: '1px solid rgba(255,255,255,.05)', borderRadius: '12px', padding: '.65rem .8rem' }}>
+              <div style={{ background: 'var(--b1)', border: '1px solid rgba(255,255,255,.05)', borderRadius: '12px', padding: '.45rem .7rem' }}>
                 <div style={{ fontSize: '.6rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '.09em', color: 'var(--n5)', marginBottom: '.2rem' }}>
                   Annual rewards <span style={{ textTransform: 'none', letterSpacing: 0, fontWeight: 500, opacity: .6 }}>(Excl. referral rewards)</span>
                 </div>
-                <div style={{ fontSize: '1.4rem', fontWeight: 800, letterSpacing: '-.03em', color: th.pri }}>~{fmtI(annualUsd)}</div>
+                <div style={{ fontSize: '1.2rem', fontWeight: 800, letterSpacing: '-.03em', color: th.pri }}>~{fmtI(annualUsd)}</div>
                 <div style={{ fontSize: '.58rem', color: 'var(--n5)', marginTop: '.15rem' }}>KAST + MOVE · 12 months</div>
               </div>
 
               {/* Annual fee */}
-              <div style={{ background: 'var(--b1)', border: '1px solid rgba(255,255,255,.05)', borderRadius: '12px', padding: '.65rem .8rem' }}>
+              <div style={{ background: 'var(--b1)', border: '1px solid rgba(255,255,255,.05)', borderRadius: '12px', padding: '.45rem .7rem' }}>
                 <div style={{ fontSize: '.6rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '.09em', color: 'var(--n5)', marginBottom: '.2rem', display: 'flex', alignItems: 'center', gap: '.3rem' }}>
                   Annual card fee
                   <span
@@ -836,9 +836,9 @@ export default function KastCardClient() {
             {/* KAST points disclaimer */}
             <div style={{
               display: 'flex', alignItems: 'flex-start', gap: '.45rem',
-              padding: '.5rem .7rem',
+              padding: '.4rem .6rem',
               background: 'rgba(251,191,36,.05)', border: '1px solid rgba(251,191,36,.18)',
-              borderRadius: '8px', fontSize: '.63rem', color: 'var(--n4)', lineHeight: 1.5,
+              borderRadius: '8px', fontSize: '.6rem', color: 'var(--n4)', lineHeight: 1.45,
             }}>
               <svg width={13} height={13} viewBox="0 0 14 14" fill="none" style={{ flexShrink: 0, marginTop: 1 }}>
                 <path d="M7 1.5L12.5 11.5H1.5L7 1.5Z" stroke="#fbbf24" strokeWidth={1.3} strokeLinejoin="round" />
@@ -856,7 +856,7 @@ export default function KastCardClient() {
           <div
             style={{
               display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-start',
-              padding: '1.5rem 0 1rem',
+              padding: '.5rem 0 .5rem',
               position: 'relative',
               overflow: 'hidden',
             }}
@@ -869,21 +869,13 @@ export default function KastCardClient() {
               pointerEvents: 'none',
             }} className="center-glow" />
 
-            {/* Card wheel */}
-            <KastCardWheel
-              cards={activeCards}
-              selectedIndex={selectedCardInTab}
-              onSelect={setSelectedCardInTab}
-              onOpenModal={() => setModalOpen(true)}
-            />
-
-            {/* Tier tabs */}
+            {/* Tier tabs — above the card */}
             <div style={{
-              display: 'flex', gap: '.35rem',
-              marginBottom: '.85rem',
-              background: 'rgba(255,255,255,.04)',
-              borderRadius: '10px', padding: '3px',
-              border: '1px solid rgba(255,255,255,.06)',
+              display: 'flex', gap: '.2rem', flexShrink: 0,
+              background: 'rgba(255,255,255,.05)',
+              borderRadius: '7px', padding: '2px',
+              border: '1px solid rgba(255,255,255,.09)',
+              width: '196px', marginBottom: '.3rem',
             }}>
               {KAST_TIERS.map((t, i) => {
                 const active = i === activeTierIdx
@@ -894,22 +886,84 @@ export default function KastCardClient() {
                     onClick={() => setActiveTierIdx(i)}
                     style={{
                       flex: 1,
-                      background: active ? 'rgba(255,255,255,.09)' : 'transparent',
+                      background: active ? 'rgba(255,255,255,.1)' : 'transparent',
                       border: 'none',
                       color: active ? tabPri : 'var(--n4)',
-                      borderRadius: '8px', padding: '.3rem .5rem',
-                      fontSize: '.68rem', fontWeight: 700, cursor: 'pointer',
+                      borderRadius: '5px', padding: '.2rem .35rem',
+                      fontSize: '.6rem', fontWeight: 700, cursor: 'pointer',
                       fontFamily: 'inherit', transition: 'background .15s, color .15s',
                       display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1,
                     }}
                   >
                     <span>{t.name}</span>
-                    <span style={{ fontSize: '.55rem', fontWeight: 600, opacity: active ? 1 : 0.5 }}>
+                    <span style={{ fontSize: '.48rem', fontWeight: 600, opacity: active ? 1 : 0.5 }}>
                       {['5–6%', '8–9%', '10–12%'][i]}
                     </span>
                   </button>
                 )
               })}
+            </div>
+
+            {/* Card wheel + card arrows */}
+            <div className="kc-wheel-wrapper" style={{ position: 'relative', width: '100%', flexShrink: 0, paddingTop: '.2rem', marginBottom: '.5rem' }}>
+              <KastCardWheel
+                cards={activeCards}
+                selectedIndex={selectedCardInTab}
+                onSelect={setSelectedCardInTab}
+                onOpenModal={() => setModalOpen(true)}
+              />
+
+              {/* Card nav arrows — rendered here, above the 3D context entirely */}
+              {activeCards.length > 1 && (
+                <button
+                  className="kc-arrow kc-arrow-l"
+                  onClick={() => setSelectedCardInTab(i => (i - 1 + activeCards.length) % activeCards.length)}
+                  aria-label="Previous card"
+                  style={{
+                    width: 28, height: 28,
+                    borderRadius: '50%',
+                    background: 'rgba(2,8,20,.65)',
+                    backdropFilter: 'blur(6px)',
+                    WebkitBackdropFilter: 'blur(6px)',
+                    border: '1px solid rgba(255,255,255,.18)',
+                    cursor: 'pointer',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    padding: 0, transition: 'background .15s',
+                    fontFamily: 'inherit',
+                  }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = 'rgba(2,8,20,.9)' }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = 'rgba(2,8,20,.65)' }}
+                >
+                  <svg width={10} height={10} viewBox="0 0 10 10" fill="none">
+                    <path d="M6.5 2L3 5l3.5 3" stroke="white" strokeWidth={1.6} strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </button>
+              )}
+              {activeCards.length > 1 && (
+                <button
+                  className="kc-arrow kc-arrow-r"
+                  onClick={() => setSelectedCardInTab(i => (i + 1) % activeCards.length)}
+                  aria-label="Next card"
+                  style={{
+                    width: 28, height: 28,
+                    borderRadius: '50%',
+                    background: 'rgba(2,8,20,.65)',
+                    backdropFilter: 'blur(6px)',
+                    WebkitBackdropFilter: 'blur(6px)',
+                    border: '1px solid rgba(255,255,255,.18)',
+                    cursor: 'pointer',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    padding: 0, transition: 'background .15s',
+                    fontFamily: 'inherit',
+                  }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = 'rgba(2,8,20,.9)' }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = 'rgba(2,8,20,.65)' }}
+                >
+                  <svg width={10} height={10} viewBox="0 0 10 10" fill="none">
+                    <path d="M3.5 2L7 5 3.5 8" stroke="white" strokeWidth={1.6} strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </button>
+              )}
             </div>
 
             {/* Phone mockup */}
@@ -932,9 +986,9 @@ export default function KastCardClient() {
           <div
             style={{
               display: 'flex', flexDirection: 'column', justifyContent: 'center',
-              padding: '1.1rem 0 1.1rem 1.8rem',
+              padding: '.5rem 0 .5rem 1.8rem',
               borderLeft: '1px solid rgba(79,156,249,.08)',
-              gap: '.75rem', overflow: 'hidden',
+              gap: '.5rem', overflow: 'hidden',
             }}
             className="right-panel"
           >
@@ -1072,7 +1126,13 @@ export default function KastCardClient() {
           }
           .center-panel {
             padding: .5rem 0 !important;
+            overflow: visible !important;
             order: 1;
+          }
+          /* Wheel breaks out of content padding to use full screen width */
+          /* flex-direction:column + align-items:center naturally centers a 100vw child */
+          .kc-wheel-wrapper {
+            width: 100vw !important;
           }
           .center-glow { display: none !important; }
           .right-panel {
@@ -1089,6 +1149,29 @@ export default function KastCardClient() {
         @media (max-width: 480px) {
           nav { padding: 0 1rem !important; }
           .main-grid { padding: calc(56px + 1rem) .9rem 2rem !important; gap: 1.5rem !important; }
+        }
+
+        /* Card wheel arrows — responsive positioning */
+        /* desktop: stage 340px (half=170), arrow half=14 → 184px; stage h=214 (half=107) */
+        .kc-arrow {
+          position: absolute;
+          top: calc(.2rem + 107px);
+          transform: translateY(-50%);
+          z-index: 20;
+        }
+        .kc-arrow-l { left:  calc(50% - 184px); }
+        .kc-arrow-r { right: calc(50% - 184px); }
+        /* ≤900px: stage 260px (half=130), h=164 (half=82) */
+        @media (max-width: 900px) {
+          .kc-arrow   { top: calc(.2rem + 82px); }
+          .kc-arrow-l { left:  calc(50% - 144px); }
+          .kc-arrow-r { right: calc(50% - 144px); }
+        }
+        /* ≤480px: stage 220px (half=110), h=139 (half=70) */
+        @media (max-width: 480px) {
+          .kc-arrow   { top: calc(.2rem + 70px); }
+          .kc-arrow-l { left:  calc(50% - 124px); }
+          .kc-arrow-r { right: calc(50% - 124px); }
         }
 
         /* Kast range slider accent (overrides default teal in card.css) */

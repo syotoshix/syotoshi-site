@@ -2,10 +2,11 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react'
 import NavBar from './NavBar'
-import CardVisual from './CardVisual'
 import PhoneMockup from './PhoneMockup'
 import GetCardModal from './GetCardModal'
+import CardVisual from './CardVisual'
 import '../../styles/card.css'
+import { CARD_DEFS, JUPITER_INDEX } from '@/lib/cards'
 import {
   TIERS,
   EXAMPLES,
@@ -678,6 +679,16 @@ export default function JupiterCardClient() {
           display: 'grid',
           gridTemplateRows: '52px 1fr',
           overflow: 'hidden',
+          // dynamic card theme
+          ['--pri'  as string]: CARD_DEFS[JUPITER_INDEX].theme.pri,
+          ['--prid' as string]: CARD_DEFS[JUPITER_INDEX].theme.prid,
+          ['--prig' as string]: CARD_DEFS[JUPITER_INDEX].theme.prig,
+          ['--bg'   as string]: isLight ? undefined : CARD_DEFS[JUPITER_INDEX].theme.bg,
+          ['--b0'   as string]: isLight ? undefined : CARD_DEFS[JUPITER_INDEX].theme.b0,
+          ['--b1'   as string]: isLight ? undefined : CARD_DEFS[JUPITER_INDEX].theme.b1,
+          ['--b2'   as string]: isLight ? undefined : CARD_DEFS[JUPITER_INDEX].theme.b2,
+          ['--b3'   as string]: isLight ? undefined : CARD_DEFS[JUPITER_INDEX].theme.b3,
+          transition: 'background .5s, color .3s',
         }}
         className="app-shell"
       >
@@ -688,9 +699,9 @@ export default function JupiterCardClient() {
         <main
           style={{
             display: 'grid',
-            gridTemplateColumns: '1fr auto 1fr',
+            gridTemplateColumns: '1fr clamp(420px, 38vw, 560px) 1fr',
             alignItems: 'center',
-            padding: '1.2rem 4rem',
+            padding: '1.2rem 2rem',
             gap: 0,
             overflow: 'hidden',
           }}
@@ -1086,9 +1097,10 @@ export default function JupiterCardClient() {
           {/* ── CENTER: phone ── */}
           <div
             style={{
-              display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-              padding: '1rem 2.5rem',
+              display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-start',
+              padding: '1.5rem 0 1rem',
               position: 'relative',
+              overflow: 'hidden',
             }}
             className="center-panel"
           >
