@@ -11,13 +11,13 @@ interface KastCardWheelProps {
   onOpenModal:   () => void
 }
 
-// ── Slot positions — desktop stage 340px ─────────────────────────────────────
+// ── Slot positions — desktop stage 300px ─────────────────────────────────────
 const SLOT_STYLES: Record<number, { transform: string; opacity: number; zIndex: number }> = {
-  [-2]: { transform: 'translateX(-410px) translateZ(-195px) rotateY(52deg)  scale(0.66)', opacity: 0.35, zIndex: 1 },
-  [-1]: { transform: 'translateX(-258px) translateZ(-68px)  rotateY(38deg)  scale(0.83)', opacity: 0.62, zIndex: 2 },
-  [ 0]: { transform: 'translateX(0)      translateZ(62px)   rotateY(0deg)   scale(1)',    opacity: 1,    zIndex: 4 },
-  [ 1]: { transform: 'translateX(258px)  translateZ(-68px)  rotateY(-38deg) scale(0.83)', opacity: 0.62, zIndex: 2 },
-  [ 2]: { transform: 'translateX(410px)  translateZ(-195px) rotateY(-52deg) scale(0.66)', opacity: 0.35, zIndex: 1 },
+  [-2]: { transform: 'translateX(-362px) translateZ(-172px) rotateY(52deg)  scale(0.66)', opacity: 0.35, zIndex: 1 },
+  [-1]: { transform: 'translateX(-228px) translateZ(-60px)  rotateY(38deg)  scale(0.83)', opacity: 0.62, zIndex: 2 },
+  [ 0]: { transform: 'translateX(0)      translateZ(55px)   rotateY(0deg)   scale(1)',    opacity: 1,    zIndex: 4 },
+  [ 1]: { transform: 'translateX(228px)  translateZ(-60px)  rotateY(-38deg) scale(0.83)', opacity: 0.62, zIndex: 2 },
+  [ 2]: { transform: 'translateX(362px)  translateZ(-172px) rotateY(-52deg) scale(0.66)', opacity: 0.35, zIndex: 1 },
 }
 
 // ── Mobile slot positions — stage 260px ───────────────────────────────────────
@@ -134,16 +134,16 @@ export default function KastCardWheel({
           mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
         }
         .kast-wheel-stage {
-          position: relative; width: 340px; height: 214px;
+          position: relative; width: 300px; height: 189px;
           perspective: 1600px; transform-style: preserve-3d; overflow: visible;
         }
         .kast-wheel-slot {
-          position: absolute; top: 0; left: 0; width: 340px;
+          position: absolute; top: 0; left: 0; width: 300px;
           transition: transform .55s cubic-bezier(.23,1,.32,1), opacity .4s ease;
           transform-style: preserve-3d;
         }
         .kast-wheel-card-face {
-          width: 340px; border-radius: 18px; position: relative; overflow: visible;
+          width: 300px; border-radius: 18px; position: relative; overflow: visible;
           aspect-ratio: 1.586; transform-style: preserve-3d; cursor: pointer;
           background: transparent;
         }

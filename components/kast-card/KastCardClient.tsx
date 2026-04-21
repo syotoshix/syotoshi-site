@@ -1100,7 +1100,7 @@ export default function KastCardClient() {
             min-height: 100vh;
             overflow: visible !important;
           }
-          html, body { height: auto !important; overflow: auto !important; }
+          html, body { height: auto !important; overflow-x: hidden !important; overflow-y: auto !important; }
           #credit-desktop { display: none !important; }
           #credit-mobile { display: block !important; }
           nav {
@@ -1152,15 +1152,15 @@ export default function KastCardClient() {
         }
 
         /* Card wheel arrows — responsive positioning */
-        /* desktop: stage 340px (half=170), arrow half=14 → 184px; stage h=214 (half=107) */
+        /* desktop: stage 300px (half=150), arrow half=14 → 164px; stage h=189 (half=95) */
         .kc-arrow {
           position: absolute;
-          top: calc(.2rem + 107px);
+          top: calc(.2rem + 95px);
           transform: translateY(-50%);
           z-index: 20;
         }
-        .kc-arrow-l { left:  calc(50% - 184px); }
-        .kc-arrow-r { right: calc(50% - 184px); }
+        .kc-arrow-l { left:  calc(50% - 164px); }
+        .kc-arrow-r { right: calc(50% - 164px); }
         /* ≤900px: stage 260px (half=130), h=164 (half=82) */
         @media (max-width: 900px) {
           .kc-arrow   { top: calc(.2rem + 82px); }
