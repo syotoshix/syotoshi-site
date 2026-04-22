@@ -12,6 +12,7 @@ import {
   KAST_POINT_VALUE,
   KAST_FRIEND_POINTS,
   KAST_FRIEND_CARD_DISCOUNT,
+  EPOCHS_PER_MONTH,
   EXAMPLES,
   CATEGORIES,
 
@@ -46,6 +47,7 @@ export default function KastCardClient() {
 
   // ── Calculator state ──
   const [spend,         setSpend]         = useState(1500)
+  const [solStaked,     setSolStaked]     = useState(100)
   const [refs,          setRefs]          = useState(0)
   const [paidRefs,      setPaidRefs]      = useState(0)
   const [isNonUsd,      setIsNonUsd]      = useState(true)
@@ -57,10 +59,12 @@ export default function KastCardClient() {
   const [isLight,       setIsLight]       = useState(false)
   const [modalOpen,     setModalOpen]     = useState(false)
   const [movePrice,     setMovePrice]     = useState<number | null>(null)
+  const [solPrice,      setSolPrice]      = useState<number | null>(null)
   const [copiedCoupon,  setCopiedCoupon]  = useState(false)
   const [refTooltip,    setRefTooltip]    = useState(false)
   const [feeTooltip,    setFeeTooltip]    = useState(false)
   const [paidTooltip,   setPaidTooltip]   = useState(false)
+  const [stakeTooltip,  setStakeTooltip]  = useState(false)
 
   // ── Phone mockup state ──
   const [phoneTime,   setPhoneTime]   = useState('')
@@ -75,17 +79,22 @@ export default function KastCardClient() {
 
   const spendFillRef = useRef<HTMLDivElement>(null)
   const spendWrapRef = useRef<HTMLDivElement>(null)
+  const solFillRef     = useRef<HTMLDivElement>(null)
+  const solWrapRef     = useRef<HTMLDivElement>(null)
   const refsFillRef    = useRef<HTMLDivElement>(null)
   const refsWrapRef    = useRef<HTMLDivElement>(null)
   const paidFillRef    = useRef<HTMLDivElement>(null)
   const paidWrapRef    = useRef<HTMLDivElement>(null)
 
   // ── Derived calculator state ──
+  const stakePointsPerMonth = tier.stakeMultiplier * solStaked * EPOCHS_PER_MONTH
+  const stakeUsdPerMonth    = stakePointsPerMonth * KAST_POINT_VALUE
+
   const kastUsd       = spend * card.kastRate                           // monthly KAST value in USD
   const kastPoints    = Math.round(kastUsd / KAST_POINT_VALUE)         // KAST points earned/month
   const moveUsd       = spend * card.moveRate                           // monthly MOVE value in USD
   const moveTokens    = movePrice !== null ? moveUsd / movePrice : null // MOVE tokens earned/month
-  const totalUsd      = kastUsd + moveUsd                               // combined monthly value
+  const totalUsd      = kastUsd + moveUsd + stakeUsdPerMonth            // combined monthly value
   const annualUsd     = totalUsd * 12
   const fee           = spend * fxRate
   const eff           = spend > 0 ? (totalUsd - fee) / spend : 0
@@ -154,19 +163,25 @@ export default function KastCardClient() {
     setPhoneDate(days[now.getDay()] + ', ' + now.getDate() + ' ' + mons[now.getMonth()])
   }
 
-  // ── MOVE price ──
+  // ── Live prices ──
   useEffect(() => {
     async function fetchMovePrice() {
       try {
         const res  = await fetch('/api/move-price')
         const data = await res.json()
         if (typeof data.price === 'number') setMovePrice(data.price)
-      } catch {
-        // leave null — UI shows fallback
-      }
+      } catch { /* leave null */ }
+    }
+    async function fetchSolPrice() {
+      try {
+        const res  = await fetch('/api/sol-price')
+        const data = await res.json()
+        if (typeof data.price === 'number') setSolPrice(data.price)
+      } catch { /* leave null */ }
     }
     fetchMovePrice()
-    const priceInterval = setInterval(fetchMovePrice, 60_000)
+    fetchSolPrice()
+    const priceInterval = setInterval(() => { fetchMovePrice(); fetchSolPrice() }, 60_000)
     return () => clearInterval(priceInterval)
   }, [])
 
@@ -201,13 +216,15 @@ export default function KastCardClient() {
   const updateFills = useCallback(() => {
     if (spendFillRef.current && spendWrapRef.current)
       spendFillRef.current.style.width   = getSliderFillWidth(spendWrapRef.current, 100, 10000, spend) + 'px'
+    if (solFillRef.current && solWrapRef.current)
+      solFillRef.current.style.width     = getSliderFillWidth(solWrapRef.current, 0, 1000, solStaked) + 'px'
     if (refsFillRef.current && refsWrapRef.current)
       refsFillRef.current.style.width    = getSliderFillWidth(refsWrapRef.current, 0, 100, refs) + 'px'
     if (paidFillRef.current && paidWrapRef.current)
       paidFillRef.current.style.width    = getSliderFillWidth(paidWrapRef.current, 0, refs || 1, clampedPaid) + 'px'
-  }, [spend, refs, clampedPaid])
+  }, [spend, solStaked, refs, clampedPaid])
 
-  useEffect(() => { updateFills() }, [spend, refs, paidRefs, updateFills])
+  useEffect(() => { updateFills() }, [spend, solStaked, refs, paidRefs, updateFills])
 
   // ── Mode switch ──
   function handleSetMode(m: PanelMode) {
@@ -557,6 +574,78 @@ export default function KastCardClient() {
               </div>
             </div>
 
+            {/* SOL Staking Slider */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '.3rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '.3rem' }}>
+                    <span style={{ fontSize: '.66rem', fontWeight: 600, letterSpacing: '.1em', textTransform: 'uppercase', color: 'var(--n4)' }}>
+                      SOL Staked to KAST
+                    </span>
+                    <span
+                      style={{ position: 'relative', display: 'inline-flex', alignItems: 'center' }}
+                      onMouseEnter={() => setStakeTooltip(true)}
+                      onMouseLeave={() => setStakeTooltip(false)}
+                    >
+                      <svg width={13} height={13} viewBox="0 0 14 14" fill="none" style={{ cursor: 'default', opacity: .55, flexShrink: 0 }}>
+                        <circle cx={7} cy={7} r={6.5} stroke="currentColor" />
+                        <line x1={7} y1={6} x2={7} y2={10.5} stroke="currentColor" strokeWidth={1.4} strokeLinecap="round" />
+                        <circle cx={7} cy={4} r={0.8} fill="currentColor" />
+                      </svg>
+                      {stakeTooltip && (
+                        <div style={{
+                          position: 'absolute', left: 0, bottom: 'calc(100% + 6px)',
+                          background: 'var(--b3)', border: '1px solid rgba(255,255,255,.1)',
+                          borderRadius: '8px', padding: '.5rem .65rem',
+                          fontSize: '.63rem', color: 'var(--n4)', lineHeight: 1.6,
+                          width: 260, zIndex: 50, pointerEvents: 'none',
+                          boxShadow: '0 4px 16px rgba(0,0,0,.4)',
+                        }}>
+                          Boost KAST points with SOL staking. Earn up to{' '}
+                          <strong style={{ color: 'var(--w)' }}>0.5 bonus KAST points per SOL staked (~3.5% APY)</strong>{' '}
+                          by staking to the KAST validator (powered by{' '}
+                          <strong style={{ color: 'var(--w)' }}>KILN</strong>) which offers both{' '}
+                          <strong style={{ color: 'var(--w)' }}>0% commission</strong> and{' '}
+                          <strong style={{ color: 'var(--w)' }}>100% MEV kickback</strong>.
+                        </div>
+                      )}
+                    </span>
+                  </div>
+                  {solPrice !== null && solStaked > 0 && (
+                    <div style={{ fontSize: '.6rem', color: 'var(--n5)', marginTop: 2 }}>
+                      ≈ {fmtI(solStaked * solPrice)} at ${solPrice.toLocaleString('en-US', { maximumFractionDigits: 2 })}/SOL
+                    </div>
+                  )}
+                </div>
+                <div style={{
+                  display: 'flex', alignItems: 'center', gap: '.3rem',
+                  background: 'var(--b0)', border: `1.5px solid ${th.arcClr}0.3)`,
+                  borderRadius: '8px', padding: '.3rem .6rem',
+                }}>
+                  <input
+                    type="number"
+                    value={solStaked}
+                    min={0} max={1000} step={0.5}
+                    onChange={e => setSolStaked(Math.min(1000, Math.max(0, parseFloat(e.target.value) || 0)))}
+                    style={{
+                      background: 'transparent', border: 'none', outline: 'none',
+                      fontSize: '.9rem', fontWeight: 700, color: th.pri,
+                      fontFamily: 'inherit', width: 64, textAlign: 'right', cursor: 'text',
+                    }}
+                  />
+                  <span style={{ fontSize: '.75rem', fontWeight: 600, color: 'var(--n4)' }}>SOL</span>
+                </div>
+              </div>
+              <div className="range-wrap" ref={solWrapRef}>
+                <div className="range-track" />
+                <div className="range-fill" ref={solFillRef} style={{ background: th.pri }} />
+                <input type="range" min={0} max={1000} step={0.5} value={solStaked} onChange={e => setSolStaked(parseFloat(e.target.value))} />
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '.6rem', color: 'var(--n5)' }}>
+                <span>0 SOL</span><span>1,000 SOL</span>
+              </div>
+            </div>
+
             {/* Referrals Slider */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '.3rem' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -648,31 +737,6 @@ export default function KastCardClient() {
               </div>
             </div>
 
-            {/* Active card / tier badge */}
-            <div style={{
-              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-              padding: '.45rem .8rem',
-              background: `${th.arcClr}0.13)`, border: `1px solid ${th.arcClr}0.2)`,
-              borderRadius: '10px',
-            }}>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-                <div style={{ fontSize: '.72rem', fontWeight: 700, color: 'var(--w)' }}>
-                  {card.name} · {tier.label}
-                </div>
-                <div style={{ fontSize: '.62rem', color: 'var(--n5)' }}>
-                  {tier.annualFee === 0 ? '$0/yr' : `${fmtI(tier.annualFee)}/yr`} annual fee
-                </div>
-              </div>
-              <div style={{ textAlign: 'right' }}>
-                <div style={{ fontSize: '.75rem', fontWeight: 800, color: th.pri, letterSpacing: '-.01em' }}>
-                  {pct(card.kastRate)} KAST
-                </div>
-                <div style={{ fontSize: '.75rem', fontWeight: 800, color: th.pri, letterSpacing: '-.01em' }}>
-                  + {pct(card.moveRate)} MOVE
-                </div>
-              </div>
-            </div>
-
             {/* Metrics grid */}
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '.3rem' }}>
 
@@ -689,7 +753,9 @@ export default function KastCardClient() {
                 <div style={{ fontSize: '1.6rem', fontWeight: 800, letterSpacing: '-.03em', color: th.pri }}>
                   ~{fmt(totalUsd)}
                 </div>
-                <div style={{ fontSize: '.63rem', color: 'var(--n5)', marginTop: '.1rem' }}>KAST + MOVE combined</div>
+                <div style={{ fontSize: '.63rem', color: 'var(--n5)', marginTop: '.1rem' }}>
+                  {solStaked > 0 ? 'KAST + MOVE + staking' : 'KAST + MOVE combined'}
+                </div>
                 <div className="plus-divider" style={{
                   position: 'absolute', right: -14, top: '50%', transform: 'translateY(-50%)',
                   width: 24, height: 24, borderRadius: '50%',
@@ -722,10 +788,13 @@ export default function KastCardClient() {
                   KAST Points / month
                 </div>
                 <div style={{ fontSize: '1.2rem', fontWeight: 800, letterSpacing: '-.03em', color: th.pri }}>
-                  ~{fmt(kastUsd)}
+                  ~{fmt(kastUsd + stakeUsdPerMonth)}
                 </div>
                 <div style={{ fontSize: '.58rem', color: 'var(--n5)', marginTop: '.15rem' }}>
-                  {kastPoints.toLocaleString()} pts · ${KAST_POINT_VALUE}/pt
+                  {(kastPoints + Math.round(stakePointsPerMonth)).toLocaleString()} pts · ${KAST_POINT_VALUE}/pt
+                  {stakePointsPerMonth > 0 && (
+                    <span style={{ opacity: .7 }}> (incl. staking)</span>
+                  )}
                 </div>
               </div>
 
@@ -1043,6 +1112,31 @@ export default function KastCardClient() {
                   }}>try it out</span>
                 )}
               </button>
+            </div>
+
+            {/* Active card / tier badge */}
+            <div style={{
+              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+              padding: '.45rem .8rem',
+              background: `${th.arcClr}0.13)`, border: `1px solid ${th.arcClr}0.2)`,
+              borderRadius: '10px',
+            }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+                <div style={{ fontSize: '.72rem', fontWeight: 700, color: 'var(--w)' }}>
+                  {card.name} · {tier.label}
+                </div>
+                <div style={{ fontSize: '.62rem', color: 'var(--n5)' }}>
+                  {tier.annualFee === 0 ? '$0/yr' : `${fmtI(tier.annualFee)}/yr`} annual fee
+                </div>
+              </div>
+              <div style={{ textAlign: 'right' }}>
+                <div style={{ fontSize: '.75rem', fontWeight: 800, color: th.pri, letterSpacing: '-.01em' }}>
+                  {pct(card.kastRate)} KAST
+                </div>
+                <div style={{ fontSize: '.75rem', fontWeight: 800, color: th.pri, letterSpacing: '-.01em' }}>
+                  + {pct(card.moveRate)} MOVE
+                </div>
+              </div>
             </div>
 
             {/* Panel content */}

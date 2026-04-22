@@ -1,16 +1,20 @@
 export interface KastTier {
-  id:        string
-  name:      string
-  label:     string
-  annualFee: number
-  refPoints: number   // KAST points you earn per qualifying referral at this tier
+  id:              string
+  name:            string
+  label:           string
+  annualFee:       number
+  refPoints:       number   // KAST points you earn per qualifying referral at this tier
+  stakeMultiplier: number   // KAST points per SOL staked per epoch (epoch ≈ 2 days)
 }
 
 export const KAST_TIERS: KastTier[] = [
-  { id: 'standard', name: 'Standard', label: 'K-Card',       annualFee: 0,      refPoints: 200  },
-  { id: 'premium',  name: 'Premium',  label: 'Premium Metal', annualFee: 1000,   refPoints: 5000 },
-  { id: 'luxe',     name: 'Luxe',     label: 'Luxe Edition',  annualFee: 10000,  refPoints: 5000 },
+  { id: 'standard', name: 'Standard', label: 'K-Card',       annualFee: 0,      refPoints: 200,  stakeMultiplier: 0.125 },
+  { id: 'premium',  name: 'Premium',  label: 'Premium Metal', annualFee: 1000,   refPoints: 5000, stakeMultiplier: 0.25  },
+  { id: 'luxe',     name: 'Luxe',     label: 'Luxe Edition',  annualFee: 10000,  refPoints: 5000, stakeMultiplier: 0.5   },
 ]
+
+// Solana epoch ≈ 2 days → ~15 epochs per month
+export const EPOCHS_PER_MONTH = 15
 
 // Value of 1 KAST point in USD
 export const KAST_POINT_VALUE = 0.08
