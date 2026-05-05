@@ -1,0 +1,291 @@
+/* ── BYBIT CARD VISUAL ── */
+.bcard {
+  width: 270px;
+  background: linear-gradient(135deg, #f5f5f5 0%, #eaeaea 50%, #dcdcdc 100%);
+  border-radius: 18px;
+  border: 1px solid rgba(247, 166, 0, 0.25);
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 1.586;
+  box-shadow: 0 16px 52px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(247, 166, 0, 0.08);
+  margin-bottom: 0.9rem;
+  flex-shrink: 0;
+  transition: background 0.5s, border-color 0.5s, box-shadow 0.2s, transform 0.1s;
+  transform-style: preserve-3d;
+  cursor: pointer;
+  will-change: transform;
+}
+.bcard:hover {
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(247, 166, 0, 0.3),
+    0 0 30px rgba(247, 166, 0, 0.1);
+}
+.bcard-shine {
+  position: absolute;
+  inset: 0;
+  border-radius: 18px;
+  background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.35) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity 0.2s;
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* Wave arcs — grey lines on white card */
+.bc-arc1 {
+  position: absolute;
+  bottom: -32px;
+  left: -10px;
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  border: 1px solid rgba(160, 160, 160, 0.35);
+}
+.bc-arc2 {
+  position: absolute;
+  bottom: -55px;
+  left: 30px;
+  width: 268px;
+  height: 268px;
+  border-radius: 50%;
+  border: 1px solid rgba(160, 160, 160, 0.25);
+}
+.bc-arc3 {
+  position: absolute;
+  bottom: -80px;
+  left: 70px;
+  width: 318px;
+  height: 318px;
+  border-radius: 50%;
+  border: 1px solid rgba(160, 160, 160, 0.18);
+}
+.bc-arc4 {
+  position: absolute;
+  bottom: -108px;
+  left: 110px;
+  width: 370px;
+  height: 370px;
+  border-radius: 50%;
+  border: 1px solid rgba(160, 160, 160, 0.12);
+}
+.bc-arc5 {
+  position: absolute;
+  bottom: -138px;
+  left: 152px;
+  width: 424px;
+  height: 424px;
+  border-radius: 50%;
+  border: 1px solid rgba(160, 160, 160, 0.08);
+}
+.bc-arc6 {
+  position: absolute;
+  bottom: -170px;
+  left: 196px;
+  width: 480px;
+  height: 480px;
+  border-radius: 50%;
+  border: 1px solid rgba(160, 160, 160, 0.05);
+}
+
+/* BYBIT logo — BYB | T where | is an orange bar */
+.bc-logo {
+  position: absolute;
+  top: 15px;
+  left: 18px;
+  display: flex;
+  align-items: center;
+  font-weight: 800;
+  font-size: 1.05rem;
+  color: #1a1a1a;
+  letter-spacing: -0.01em;
+}
+.bc-logo-by { color: #1a1a1a; }
+.bc-logo-i {
+  display: inline-block;
+  width: 3.5px;
+  height: 1em;
+  background: #f7a600;
+  border-radius: 2px;
+  margin: 0 1.5px;
+  flex-shrink: 0;
+}
+.bc-logo-t { color: #1a1a1a; }
+
+.bc-card-label {
+  position: absolute;
+  bottom: 14px;
+  right: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+}
+.bc-card-label-t {
+  font-size: 0.52rem;
+  font-weight: 700;
+  color: #888;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.bc-dots {
+  position: absolute;
+  bottom: 17px;
+  left: 18px;
+  font-size: 1rem;
+  letter-spacing: 0.12em;
+  color: rgba(0, 0, 0, 0.2);
+}
+
+/* ── BYBIT ORANGE OVERRIDES (scoped to .bybit-page) ── */
+
+.bybit-page .range-track {
+  background: #3a2700;
+}
+.bybit-page .range-fill {
+  background: #f7a600;
+}
+.bybit-page input[type='range']::-webkit-slider-thumb {
+  background: #f7a600;
+  border-color: #0e0800;
+  box-shadow: 0 0 0 2px #f7a600, 0 3px 10px rgba(247, 166, 0, 0.35);
+}
+.bybit-page input[type='range']::-moz-range-thumb {
+  background: #f7a600;
+  border-color: #0e0800;
+  box-shadow: 0 0 0 2px #f7a600, 0 3px 10px rgba(247, 166, 0, 0.35);
+}
+.bybit-page .live-dot {
+  background: #f7a600;
+}
+.bybit-page .live-dot::after {
+  background: #f7a600;
+}
+.bybit-page .pn-msg .hi {
+  color: #f7a600;
+}
+.bybit-page .ph-dot.on {
+  background: #f7a600;
+}
+.bybit-page .tm.reached .tm-dot {
+  background: #f7a600;
+  border-color: #f7a600;
+  box-shadow: 0 0 6px rgba(247, 166, 0, 0.5);
+}
+.bybit-page .tm.reached .tm-label {
+  color: #f7a600;
+}
+.bybit-page .tm.current .tm-dot {
+  box-shadow: 0 0 10px rgba(247, 166, 0, 0.7);
+}
+.bybit-page .tm-dot {
+  background: #3a2700;
+  border-color: #6a4a20;
+}
+.bybit-page .tm-label {
+  color: #6a4a20;
+}
+.bybit-page .info-icon {
+  color: #7a5a30;
+}
+.bybit-page .info-icon:hover {
+  color: #f7a600;
+}
+.bybit-page .info-tip {
+  background: #3a2700;
+  border-color: rgba(247, 166, 0, 0.2);
+  color: #f5ddb0;
+}
+.bybit-page .info-tip::after {
+  border-top-color: #3a2700;
+}
+.bybit-page .ph-screen {
+  background: linear-gradient(160deg, #1c1200 0%, #120d00 40%, #0e0800 100%);
+}
+.bybit-page .pn-icon {
+  background: #2d1e00;
+}
+.bybit-page .country-select-wrap select {
+  background: #2d1e00;
+}
+.bybit-page .country-select-wrap select:focus {
+  border-color: rgba(247, 166, 0, 0.4);
+}
+
+/* ── LIGHT MODE BYBIT ── */
+body.light .bybit-page .ph-screen {
+  background: linear-gradient(160deg, #fff8e6 0%, #fffbf0 50%, #ffffff 100%);
+}
+body.light .bcard {
+  background: linear-gradient(135deg, #fafafa 0%, #f0f0f0 50%, #e8e8e8 100%);
+}
+body.light .bybit-page .country-select-wrap select {
+  background: #fff3cc;
+  color: #111;
+  border-color: rgba(0, 0, 0, 0.1);
+}
+body.light .bybit-page .range-track {
+  background: #f0d080;
+}
+body.light .bybit-page .tm-dot {
+  background: #f0d080;
+  border-color: #c8a030;
+}
+body.light .bybit-page .tm-label {
+  color: #6b4800;
+}
+body.light .bybit-page .tm.reached .tm-label {
+  color: #a06800;
+}
+body.light .bybit-page .tm.current .tm-label {
+  color: #111;
+}
+body.light .bybit-page input[type='range']::-webkit-slider-thumb {
+  border-color: #eef3f8;
+}
+body.light .bybit-page input[type='range']::-moz-range-thumb {
+  border-color: #eef3f8;
+}
+body.light .bybit-page .info-tip {
+  background: #2a1800;
+  color: #f5ddb0;
+}
+body.light .bybit-page .info-tip::after {
+  border-top-color: #2a1800;
+}
+
+/* Override card.css teal light-mode rules for Bybit amber theme */
+body.light .bybit-page .metric-hi {
+  background: linear-gradient(135deg, #fff3cc, #ffe799) !important;
+  border-color: rgba(247, 166, 0, 0.25) !important;
+}
+body.light .bybit-page .plus-divider {
+  background: #f0d080 !important;
+  border-color: rgba(247, 166, 0, 0.3) !important;
+}
+body.light .bybit-page .custom-amount-input-wrap {
+  background: #ffffff !important;
+  border-color: rgba(247, 166, 0, 0.4) !important;
+}
+body.light .bybit-page nav {
+  background: rgba(255, 248, 230, 0.95) !important;
+  border-bottom-color: rgba(247, 166, 0, 0.2) !important;
+}
+body.light .bc-wordmark-text { color: #000 !important; }
+body.light .bc-wordmark-sub  { color: #555 !important; }
+
+body.light .bybit-page .pn {
+  background: #fff3cc !important;
+  border-color: rgba(247, 166, 0, 0.2) !important;
+}
+body.light .bybit-page .pn-icon {
+  background: #ffe799 !important;
+}
+body.light .bybit-page .pn-app {
+  color: rgba(0, 0, 0, 0.45) !important;
+}
+body.light .bybit-page .pn-msg {
+  color: rgba(0, 0, 0, 0.85) !important;
+}
+body.light .bybit-page .pn-t {
+  color: rgba(0, 0, 0, 0.3) !important;
+}
