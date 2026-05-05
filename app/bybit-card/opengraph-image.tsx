@@ -59,12 +59,12 @@ export default function Image() {
 
               {/* Bottom: stars + Mastercard */}
               <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between' }}>
-                <span style={{ fontSize: 14, letterSpacing: 4, color: 'rgba(0,0,0,.2)' }}>★ ★ ★ ★ ★</span>
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3 }}>
-                  <span style={{ fontSize: 8, fontWeight: 700, color: '#888', textTransform: 'uppercase', letterSpacing: 1 }}>Debit</span>
+                <span style={{ fontSize: 15, letterSpacing: 7, color: 'rgba(0,0,0,.22)' }}>★ ★ ★ ★</span>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
+                  <span style={{ fontSize: 8, fontWeight: 700, color: '#999', textTransform: 'uppercase', letterSpacing: 1.2 }}>Debit</span>
                   <div style={{ display: 'flex' }}>
-                    <div style={{ width: 26, height: 26, borderRadius: '50%', background: '#EB001B', display: 'flex' }} />
-                    <div style={{ width: 26, height: 26, borderRadius: '50%', background: '#F79E1B', display: 'flex', marginLeft: -12 }} />
+                    <div style={{ width: 32, height: 32, borderRadius: '50%', background: '#EB001B', display: 'flex' }} />
+                    <div style={{ width: 32, height: 32, borderRadius: '50%', background: '#F79E1B', display: 'flex', marginLeft: -14 }} />
                   </div>
                 </div>
               </div>

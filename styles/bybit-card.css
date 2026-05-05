@@ -112,28 +112,28 @@
 
 .bc-card-label {
   position: absolute;
-  bottom: 14px;
-  right: 15px;
+  bottom: 13px;
+  right: 14px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 3px;
+  gap: 4px;
 }
 .bc-card-label-t {
-  font-size: 0.52rem;
+  font-size: 0.5rem;
   font-weight: 700;
-  color: #888;
-  letter-spacing: 0.07em;
+  color: #999;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
 }
 
 .bc-dots {
   position: absolute;
-  bottom: 17px;
-  left: 18px;
+  bottom: 16px;
+  left: 17px;
   font-size: 1rem;
-  letter-spacing: 0.12em;
-  color: rgba(0, 0, 0, 0.2);
+  letter-spacing: 0.28em;
+  color: rgba(0, 0, 0, 0.22);
 }
 
 /* ── BYBIT ORANGE OVERRIDES (scoped to .bybit-page) ── */

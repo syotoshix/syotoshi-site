@@ -69,14 +69,14 @@ export default function BybitCardVisual({ onOpenModal, variant }: BybitCardVisua
       {/* Mastercard logo + Debit label — bottom right */}
       <div className="bc-card-label">
         <div className="bc-card-label-t">Debit</div>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 618" width="44" height="27" style={{ display: 'block' }}>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 618" width="52" height="32" style={{ display: 'block' }}>
           <path fill="#EB001B" d="m308,0a309,309 0 1,0 2,0z"/>
           <path fill="#F79E1B" d="m690,0a309,309 0 1,0 2,0z"/>
           <path fill="#FF5F00" d="m500,66a309,309 0 0,0 0,486 309,309 0 0,0 0-486"/>
         </svg>
       </div>
       {/* Stars */}
-      <div className="bc-dots">★ ★ ★ ★ ★</div>
+      <div className="bc-dots">★ ★ ★ ★</div>
     </div>
   )
 }
