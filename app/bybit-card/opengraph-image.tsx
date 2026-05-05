@@ -59,7 +59,14 @@ export default function Image() {
 
               {/* Bottom: stars + Mastercard */}
               <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between' }}>
-                <span style={{ fontSize: 15, letterSpacing: 7, color: 'rgba(0,0,0,.22)' }}>★ ★ ★ ★</span>
+                {/* SVG stars — avoids missing glyph boxes */}
+                <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+                  {[0,1,2,3].map(i => (
+                    <svg key={i} width="13" height="13" viewBox="0 0 24 24">
+                      <path fill="rgba(0,0,0,.22)" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                    </svg>
+                  ))}
+                </div>
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
                   <span style={{ fontSize: 8, fontWeight: 700, color: '#999', textTransform: 'uppercase', letterSpacing: 1.2 }}>Debit</span>
                   <div style={{ display: 'flex' }}>
