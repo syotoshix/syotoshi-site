@@ -47,33 +47,29 @@ export default function Image() {
             <div style={{ position: 'absolute', bottom: -92, left:  78,  width: 348, height: 348, borderRadius: '50%', border: '1px solid rgba(150,150,150,.15)', display: 'flex' }} />
             <div style={{ position: 'absolute', bottom: -124, left: 124, width: 405, height: 405, borderRadius: '50%', border: '1px solid rgba(150,150,150,.09)', display: 'flex' }} />
 
-            {/* Card content */}
-            <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', padding: '17px 17px 14px' }}>
-              {/* Top: BYBIT logo */}
-              <div style={{ display: 'flex', alignItems: 'center' }}>
-                <span style={{ fontWeight: 800, fontSize: 20, color: '#1a1a1a', letterSpacing: -0.5 }}>BYB</span>
-                <div style={{ width: 3.5, height: 20, background: '#f7a600', borderRadius: 2, margin: '0 2px', display: 'flex' }} />
-                <span style={{ fontWeight: 800, fontSize: 20, color: '#1a1a1a', letterSpacing: -0.5 }}>T</span>
-                <span style={{ fontWeight: 700, fontSize: 10, color: 'rgba(0,0,0,.3)', marginLeft: 5 }}>EU</span>
-              </div>
+            {/* BYBIT logo — top left */}
+            <div style={{ position: 'absolute', top: 17, left: 17, display: 'flex', alignItems: 'center' }}>
+              <span style={{ fontWeight: 800, fontSize: 20, color: '#1a1a1a', letterSpacing: -0.5 }}>BYB</span>
+              <div style={{ width: 3.5, height: 20, background: '#f7a600', borderRadius: 2, margin: '0 2px', display: 'flex' }} />
+              <span style={{ fontWeight: 800, fontSize: 20, color: '#1a1a1a', letterSpacing: -0.5 }}>T</span>
+              <span style={{ fontWeight: 700, fontSize: 10, color: 'rgba(0,0,0,.3)', marginLeft: 5 }}>EU</span>
+            </div>
 
-              {/* Bottom: stars + Mastercard */}
-              <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between' }}>
-                {/* SVG stars — avoids missing glyph boxes */}
-                <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
-                  {[0,1,2,3].map(i => (
-                    <svg key={i} width="13" height="13" viewBox="0 0 24 24">
-                      <path fill="rgba(0,0,0,.22)" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                    </svg>
-                  ))}
-                </div>
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
-                  <span style={{ fontSize: 8, fontWeight: 700, color: '#999', textTransform: 'uppercase', letterSpacing: 1.2 }}>Debit</span>
-                  <div style={{ display: 'flex' }}>
-                    <div style={{ width: 32, height: 32, borderRadius: '50%', background: '#EB001B', display: 'flex' }} />
-                    <div style={{ width: 32, height: 32, borderRadius: '50%', background: '#F79E1B', display: 'flex', marginLeft: -14 }} />
-                  </div>
-                </div>
+            {/* Stars — bottom left */}
+            <div style={{ position: 'absolute', bottom: 16, left: 17, display: 'flex', gap: 6, alignItems: 'center' }}>
+              {[0,1,2,3].map(i => (
+                <svg key={i} width="13" height="13" viewBox="0 0 24 24">
+                  <path fill="rgba(0,0,0,.22)" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                </svg>
+              ))}
+            </div>
+
+            {/* Debit + Mastercard — bottom right */}
+            <div style={{ position: 'absolute', bottom: 14, right: 17, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
+              <span style={{ fontSize: 8, fontWeight: 700, color: '#999', textTransform: 'uppercase', letterSpacing: 1.2 }}>Debit</span>
+              <div style={{ display: 'flex' }}>
+                <div style={{ width: 32, height: 32, borderRadius: '50%', background: '#EB001B', display: 'flex' }} />
+                <div style={{ width: 32, height: 32, borderRadius: '50%', background: '#F79E1B', display: 'flex', marginLeft: -14 }} />
               </div>
             </div>
           </div>
