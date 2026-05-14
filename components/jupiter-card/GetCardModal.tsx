@@ -95,7 +95,7 @@ export default function GetCardModal({
 
         <div style={{ display: 'flex', gap: '.75rem', marginBottom: '1.25rem', flexWrap: 'wrap' }}>
           <a
-            href="https://apps.apple.com/nl/app/jupiter-mobile-solana-wallet/id6484069059"
+            href="https://jupiter.go.link/aLnPc"
             target="_blank"
             rel="noopener"
             data-umami-event="jupiter-click-appstore"
@@ -126,7 +126,7 @@ export default function GetCardModal({
             </div>
           </a>
           <a
-            href="https://play.google.com/store/apps/details?id=ag.jup.jupiter.android"
+            href="https://jupiter.go.link/aLnPc"
             target="_blank"
             rel="noopener"
             data-umami-event="jupiter-click-playstore"
