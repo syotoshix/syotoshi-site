@@ -37,44 +37,11 @@ const socials = [
 
 export default function Home() {
   return (
-    <main style={{ position: 'relative', height: '100vh', background: '#000', overflow: 'hidden' }}>
+    <main className="home-main">
       <ShaderCanvas />
-
-      <div
-        style={{
-          position: 'absolute',
-          inset: 0,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          pointerEvents: 'none',
-          gap: '2rem',
-        }}
-      >
-        <h1
-          style={{
-            fontFamily: "'Microsport', sans-serif",
-            fontSize: 'clamp(3.5rem, 11vw, 8rem)',
-            fontWeight: 700,
-            color: '#ffffff',
-            letterSpacing: '0.18em',
-            lineHeight: 1,
-            margin: 0,
-            textTransform: 'uppercase',
-          }}
-        >
-          SYOTOSHI
-        </h1>
-
-        <div
-          style={{
-            display: 'flex',
-            gap: '1.2rem',
-            alignItems: 'center',
-            pointerEvents: 'all',
-          }}
-        >
+      <div className="home-center">
+        <h1 className="home-title">SYOTOSHI</h1>
+        <div className="social-row">
           {socials.map(({ label, href, icon }) => (
             <a
               key={label}

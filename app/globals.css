@@ -35,6 +35,58 @@ body {
   color: var(--w);
 }
 
+.home-main {
+  position: relative;
+  height: 100vh;
+  height: 100dvh;
+  background: #000;
+  overflow: hidden;
+}
+
+.home-center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  gap: 1.25rem;
+  padding: 0 1rem;
+}
+
+.home-title {
+  font-family: 'Microsport', sans-serif;
+  font-size: clamp(2.6rem, 13vw, 8rem);
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  margin: 0;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.social-row {
+  display: flex;
+  gap: 0.9rem;
+  align-items: center;
+  pointer-events: all;
+}
+
+@media (min-width: 480px) {
+  .home-center {
+    gap: 2rem;
+  }
+  .home-title {
+    font-size: clamp(3.5rem, 11vw, 8rem);
+    letter-spacing: 0.18em;
+  }
+  .social-row {
+    gap: 1.2rem;
+  }
+}
+
 .social-icon {
   color: rgba(255, 255, 255, 0.82);
   display: flex;
@@ -55,6 +107,13 @@ body {
   background: rgba(0, 0, 0, 0.6);
   box-shadow: 0 0 18px rgba(255, 255, 255, 0.35), 0 0 6px rgba(255, 255, 255, 0.2);
 }
+@media (max-width: 479px) {
+  .social-icon {
+    width: 44px;
+    height: 44px;
+  }
+}
+
 .social-icon img {
   filter: invert(1) opacity(0.82);
   mix-blend-mode: screen;
