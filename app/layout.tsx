@@ -9,12 +9,16 @@ const inter = Inter({
   display: 'swap',
 })
 
+export const viewport = {
+  themeColor: '#000000',
+}
+
 export const metadata: Metadata = {
   title: {
-    default: 'Jupiter Card - Cashback Calculator',
+    default: 'Syotoshi',
     template: '%s | Syotoshi',
   },
-  description: 'Calculate your cashback earnings with the Jupiter Global Visa Infinite card.',
+  description: 'See You On The Other Side.',
   icons: {
     icon: [
       { url: '/favicon/favicon.ico', type: 'image/x-icon' },
@@ -34,6 +38,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        <link href="https://fonts.cdnfonts.com/css/microsport" rel="stylesheet" />
+      </head>
       <body className={inter.className}>
         {children}
         <Script

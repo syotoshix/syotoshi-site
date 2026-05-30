@@ -35,6 +35,35 @@ body {
   color: var(--w);
 }
 
+.social-icon {
+  color: rgba(255, 255, 255, 0.82);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.4);
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+}
+.social-icon:hover {
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.85);
+  background: rgba(0, 0, 0, 0.6);
+  box-shadow: 0 0 18px rgba(255, 255, 255, 0.35), 0 0 6px rgba(255, 255, 255, 0.2);
+}
+.social-icon img {
+  filter: invert(1) opacity(0.82);
+  mix-blend-mode: screen;
+  transition: filter 0.2s ease;
+}
+.social-icon:hover img {
+  filter: invert(1) opacity(1);
+}
+
 body.light {
   --bg: #eef3f8;
   --w:  #000000;
